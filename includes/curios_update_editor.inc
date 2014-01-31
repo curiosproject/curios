@@ -40,11 +40,25 @@ function curios_update_form_page($resource_type, $subject_id = NULL) {
     drupal_set_message("Unknown record or unable to retrieve: $resource_type->label; ID: $subject_id.", 'error', FALSE);
     return curios_update_page();
   } else {
-    $page = array();
+   // check if the user has editing and validating permission
+   if ( curios_is_valid_editor($subject_id)|| curios_is_valid_validator($subject_id))
+   {
+     $page = array();
     $page[] = array('#markup' => "<p>Edit the form below to update this record.</p>");
     $page[] = drupal_get_form('curios_update_form', $resource_type, $subject_id, $view_result);
-
+     
     return $page;
+   }
+    else
+   {
+
+   $maintainers = implode(';',curios_get_maintainers($subject_id));
+ 	
+	drupal_set_message("Cannot edit a record maintained by another society:  Subject $subject_id is maintained by \"$maintainers\". If you are a member of \"$maintainers\", please make sure that you have a permission to edit a record.", 'warning', FALSE);
+	return curios_update_page();
+   }
+
+    
   }
 }
 
@@ -159,6 +173,7 @@ function curios_update_form($form, $form_state, $resource_type, $subject_id, $vi
     '#size' => '80',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$title_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $title_value,
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
   );
   $form['old_'.$title_field->getId()] = array(
     '#type' => 'hidden',
@@ -173,6 +188,7 @@ function curios_update_form($form, $form_state, $resource_type, $subject_id, $vi
     '#format' => 'filtered_html',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$description_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $description_value,
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
   );
   $form['old_'.$description_field->getId()] = array(
     '#type' => 'hidden',
@@ -185,6 +201,7 @@ function curios_update_form($form, $form_state, $resource_type, $subject_id, $vi
     '#title' => t('Fields / Attributes'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE)
   );
 
   // Populated in fieldset fields and used in relationship fieldsets.
@@ -248,6 +265,7 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
     '#type' => 'textfield',
     '#title' => t($owner_field->getLabel()),
     '#required' => FALSE,
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
     '#size' => '80',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$owner_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $owner_value,
@@ -263,6 +281,7 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
     '#type' => 'textfield',
     '#title' => t($maintainer_field->getLabel()),
     '#required' => FALSE,
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
     '#size' => '80',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$maintainer_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $maintainer_field_value,
@@ -277,6 +296,7 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
   $form['record_meta'][$published_field->getId()] = array(
     '#type' => 'textfield',
     '#title' => t($published_field->getLabel()),
+    '#disabled' => (curios_is_valid_validator($subject_id)?FALSE:TRUE) ,
     '#required' => FALSE,
     '#size' => '80',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$published_field->getId()]['predicates'][0] .')</span>',
@@ -341,6 +361,7 @@ function _curios_update_fieldset_fields(&$form, $config, $rdf_mapping, $view_res
 }
 
 function curios_update_form_add_text_field(&$form, $resource_type, $instance, $rdf_mapping, $view_result, $autocomplete = FALSE) {
+ 
   $results_field = $resource_type->name.'_'.$instance['field_name'];
   $value = empty($view_result[0]->$results_field) ? '' : $view_result[0]->$results_field;
 
@@ -380,6 +401,7 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
 }
 
 function curios_update_form_add_daterange_field(&$form, $resource_type, $instance, $rdf_mapping, $view_result, $date_range_position) {
+  $subject_id=$form['identifier']['#value'];
   $config = curios_configuration();
 
   drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-date-handler.js');
@@ -404,7 +426,7 @@ function curios_update_form_add_daterange_field(&$form, $resource_type, $instanc
       '#title' => t($instance['label']),
       '#field_suffix' =>
           '<span class="rdf-predicate">(' . $rdf_mapping[$instance['field_name']]['predicates'][0] . ')</span>' .
-          '<a href="#" onclick="return false;" class="update-date-btn">[ Edit Date ]</a>' .
+          (curios_is_valid_editor($subject_id)?'<a href="#" onclick="return false;" class="update-date-btn">[ Edit Date ]</a>':'') .
           '<div class="date-input-widget"></div>',
       '#attributes' => array(
           'class' => array('datetime-type'),
@@ -451,6 +473,7 @@ function _curios_update_fieldset_existing_relationships(&$form, $form_state, $rd
     '#tree' => TRUE, // values stored in a tree for grouping relationship fields.
     '#prefix' => '<div id="relationships-remove-fieldset-wrapper">', // for AJAX callback
     '#suffix' => '</div>',
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
   );
 
   if (empty($form_state['storage']['relationship_listing_group_remove'])) {
@@ -532,6 +555,7 @@ function _curios_update_fieldset_existing_relationships(&$form, $form_state, $rd
 }
 
 function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_mapping, $relationship_options) {
+  $subject_id = $form['identifier']['#value'];
   // New relationships.
   $form['relationship_fieldset'] = array(
     '#type' => 'fieldset',
@@ -541,6 +565,7 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
     '#tree' => TRUE, // values stored in a tree for grouping relationship fields.
     '#prefix' => '<div id="relationships-create-fieldset-wrapper">', // for AJAX callback
     '#suffix' => '</div>',
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
   );
   $form['relationship_fieldset'][] = array('#markup' => '<p>To add a relationship, select the relationship type
       from the drop down menu and enter the SubjectId of the record in the textbox.</p>');
@@ -593,6 +618,7 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
             'wrapper' => 'relationships-create-fieldset-wrapper',
           ),
           '#limit_validation_errors' => array(),
+
         );
         $form['relationship_fieldset'][$current_group_name]['field']['#required'] = TRUE;
         $form['relationship_fieldset'][$current_group_name]['value']['#required'] = TRUE;
@@ -628,11 +654,13 @@ function _curios_update_fieldset_latest_records(&$form, $form_state) {
 }
 
 function _curios_update_fieldset_delete(&$form, $config, $rdf_mapping) {
+  $subject_id = $form['identifier']['#value'];
   $form['delete_fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('Delete Record'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
   );
   $form['delete_fieldset']['delete_text'] = array('#markup' => '<p>This will permanently delete the record.</p>');
   $form['delete_fieldset']['delete'] = array(
@@ -801,20 +829,37 @@ function curios_update_form_submit($form, &$form_state, $redirect = 'edit') {
     if (__is_identifier_field($instance) ||
         __is_title_field($instance) ||
         __is_description_field($instance) ||
-        __is_relationship_field($instance)) {
+        __is_relationship_field($instance)
+	) {
       continue;
     }
-
-    // Add/remove literal field values.
+   
+     // Add/remove literal field values.
     if ($instance['ldcms_type'] == 'daterange') { // Handle date range values.
       curios_update_form_submit_date_range($form_state, $instance, $rdf_mapping, $triples_insert, $triples_delete, $triples_delete_append, $triples_where_append);
-    } else { // All other field types.
+    }
+    else { // All other field types.
       curios_update_form_submit_field($form_state, $instance, $rdf_mapping, $triples_insert, $triples_delete);
     }
   }
 
   // Add/remove relationships.
   curios_update_form_submit_relationships($form_state, $instance, $rdf_mapping, $triples_insert, $triples_delete);
+ 
+ // handle published if this is not a validator
+ if (!empty($triples_delete) || !empty($triples_insert))
+ {
+  // if there is an update (passed above test) amnd the current user is not a validator (and hence not an admin either) then set the published status to pending.  
+  $published_field = $config->getField($config->getPublishedFieldId());
+  $published_value_old = $form_state['values']['old_'.$published_field->getId()];
+  if (!curios_is_valid_validator($subject_id))
+  	{
+           if (!empty($published_value_old )) 
+		$triples_delete[] = '      ' . $rdf_mapping[$published_field->getId()]['predicates'][0]  ." \"". __curios_escape_sparql($published_value_old) ."\"^^xsd:string;";     
+	   $triples_insert[] = '      ' . $rdf_mapping[$published_field->getId()]['predicates'][0]  ." \"pending\"^^xsd:string;";
+        }
+	
+  }
 
   // Filter duplicates and build triples strings.
   $triples_insert = array_unique($triples_insert);
@@ -826,8 +871,11 @@ function curios_update_form_submit($form, &$form_state, $redirect = 'edit') {
 
   // Submit form.
   if (!empty($triples_delete) || !empty($triples_insert)) {
-    $success = _curios_subject_update($subject_id, $triples_insert, $triples_delete, $triples_delete_append, $triples_where_append);
+   
+    
 
+    $success = _curios_subject_update($subject_id, $triples_insert, $triples_delete, $triples_delete_append, $triples_where_append);
+   
     if ($success) {
       drupal_set_message("The record has been updated successfully (ID: $subject_id).", 'status', FALSE);
       watchdog('curios_activity',t('Update %recordID with %new'),array('%recordID'=>$subject_id,'%new'=>$triples_insert),WATCHDOG_INFO,$link = NULL);
@@ -853,9 +901,11 @@ function curios_update_form_submit_field(&$form_state, $instance, $rdf_mapping, 
   $form_value_old = $form_state['values']['old_'.$instance['field_name']];
 
   if ($form_value_new != $form_value_old) {
+ 
     if (!empty($form_value_old)) {
       $triples_delete[] = '      ' . $rdf_mapping[$instance['field_name']]['predicates'][0]  ." \"". __curios_escape_sparql($form_value_old) ."\"^^xsd:string;";
     }
+
 
     if (!empty($form_value_new)) {
       $triples_insert[] = '      ' . $rdf_mapping[$instance['field_name']]['predicates'][0]  ." \"". __curios_escape_sparql($form_value_new) ."\"^^xsd:string;";
@@ -956,3 +1006,69 @@ function curios_autocomplete_fields($resource_name, $field_name, $q = '') {
 
   drupal_json_output($matches);
 }
+
+/*
+ * get a list of maintainers for a record
+ */
+function curios_get_maintainers($subject_id){
+  // cache/fetch maintainers values
+  $key = __curios_hash($subject_id, 'maintainedBy');
+  $maintainers = phpFastCache::get($key);
+
+  if ($maintainers == NULL) {
+    $maintainers = _curios_fetch_subject_maintainers($subject_id);
+    phpFastCache::set($key, $maintainers, 600);
+  }
+
+  return $maintainers;
+}
+
+function curios_get_owner($subject_id){
+  // cache/fetch maintainers values
+  $key = __curios_hash($subject_id, 'ownedBy');
+  $owner = phpFastCache::get($key);
+
+  if ($owner == NULL) {
+    $owner = _curios_fetch_subject_owner($subject_id);
+    phpFastCache::set($key, $owner, 600);
+  }
+
+  return $owner;
+}
+
+
+/**
+ * Given a record id, return true if current user can edit the record and FALSE otherwise
+ * A user can edit the record iff his/her group maintain the record and he has an editor role.
+ */
+function curios_is_valid_editor($subject_id){
+   // if this is a data admin then bypass all tests.
+  if (curios_is_valid_admin()) return TRUE;
+
+  $group_code = curios_get_user_groupcode();
+  $maintainers = curios_get_maintainers($subject_id);
+  return (user_access('curios edit own records')&&(in_array($group_code, $maintainers)||in_array("any",curios_get_owner($subject_id)) ));
+}
+
+/**
+ * Given a record id, return true if current user can edit the record and FALSE otherwise
+ * A user can edit the record iff his/her group maintain the record and he has an editor role.
+ */
+function curios_is_valid_validator($subject_id){
+  // if this is a data admin then bypass all tests.
+  if (curios_is_valid_admin()) return TRUE;
+
+  $group_code = curios_get_user_groupcode();
+  $maintainers = curios_get_maintainers($subject_id);
+
+  return (user_access('curios validate own records')&&(in_array($group_code, $maintainers)||in_array("any",curios_get_owner($subject_id)) ));
+}
+
+/**
+ * Given a record id, return true if current user can edit the record and FALSE otherwise
+ * A user can edit the record iff his/her group maintain the record and he has an editor role.
+ */
+function curios_is_valid_admin(){
+  return user_access('curios manage all records');
+}
+

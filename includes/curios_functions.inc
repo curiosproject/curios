@@ -19,6 +19,32 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * check if a record is visible. If there is no cached result, fetch from the triple store, however cached the results.
+ */
+function curios_is_visible($subject_id){
+  // cache/fetch maintainers values
+  $key = __curios_hash($subject_id, 'visibility');
+  $isVisible = phpFastCache::get($key);
+
+  if ($isVisible == NULL) {
+    $isVisible = _curios_fetch_subject_visibility($subject_id);
+    // set cache expiration time 5 mins
+    phpFastCache::set($key, $isVisible, 300);
+  }
+  return $isVisible;
+}
+
+/**
+ * Return the group code of a user
+ */
+function curios_get_user_groupcode() {
+  global $user;
+  $user_data = user_load($user->uid);
+  $group_code = taxonomy_term_load($user_data->field_curios_group_code['und'][0]['tid'])->name;
+  return $group_code;
+}
+
 /**
  * Returns a human readble representation of a DateRange.
  */
@@ -63,7 +89,7 @@ function curios_format_daterange($dateFrom, $dateTo) {
 		return substr($strYearFrom,0,-1).'0s';
   	// same century
 	if (strcmp(substr($strYearFrom,0,2),substr($strYearTo,0,2)) == 0) 
-		return strval(intval(substr($strYearFrom,0,2))-1).'th century';
+		return strval(intval(substr($strYearFrom,0,2))+1).'th century';
   }
    // winter, lasting until next year
    if ( (strcmp($dateMonthFrom,'01-12') == 0) &&

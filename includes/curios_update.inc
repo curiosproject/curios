@@ -322,6 +322,7 @@ function curios_insert_form_submit($form, &$form_state, $redirect = 'edit') {
   $view_spec = $config->getViewSpec($view_spec_id);
   $title_field = $config->getField($view_spec->getTitleFieldId());
   $description_field = $config->getField($view_spec->getDescriptionFieldId());
+ 
 
   $rdf_type = $rdf_mapping['rdftype'][0];
   $triples_insert = array();
@@ -337,6 +338,23 @@ function curios_insert_form_submit($form, &$form_state, $redirect = 'edit') {
 
     $triples_insert[] = '      ' . $rdf_mapping[$field_name]['predicates'][0]  ." \"". __curios_escape_sparql($form_value) ."\"^^xsd:string;";
   }
+
+   // enforce post-conditions: owner_field and maintainer_field are set to user's society code. publishedfield set to pending.
+  $owner_field = $config->getField($config->getOwnerFieldId());
+  $maintainer_field = $config->getField($config->getMaintainerFieldId());
+  $published_field = $config->getField($config->getPublishedFieldId());
+  $group_code = curios_get_user_groupcode();
+  //  if current user has a group code, set new record's owner and maintainer to user's groupcode
+  if (isset($group_code))
+  {	$group_code = __curios_escape_sparql($group_code);
+	$triples_insert[] = '      ' . $rdf_mapping[$owner_field->getId()]['predicates'][0]  ." \"$group_code\"^^xsd:string;";
+	$triples_insert[] = '      ' . $rdf_mapping[$maintainer_field->getId()]['predicates'][0]  ." \"$group_code\"^^xsd:string;";
+  }
+  else 
+	$triples_insert[] = '      ' . $rdf_mapping[$owner_field->getId()]['predicates'][0]  ." \"any\"^^xsd:string;";
+
+  $triples_insert[] = '      ' . $rdf_mapping[$published_field->getId()]['predicates'][0]  ." \"pending\"^^xsd:string;";
+
 
   $triples_insert = array_unique($triples_insert);
   $triples_insert = join("\n", $triples_insert);
@@ -383,6 +401,11 @@ function __is_description_field($field_instance) {
   return ($field_instance['field_name'] == $config->getDescriptionFieldId() || $field_instance['field_name'] == 'hc_description');
 }
 
+function __is_published_field($field_instance) {
+  $config = curios_configuration();
+  return $field_instance['field_name'] == $config->getPublishedFieldId();
+}
+
 function __is_special_field($field_instance, $config) { 
   return $field_instance['field_name'] == $config->getImageRelationshipFieldId() || // FIXME Image relationship should be treated as normal relationships. 
          $field_instance['field_name'] == $config->getOwnerFieldId() ||
@@ -390,3 +413,5 @@ function __is_special_field($field_instance, $config) {
          $field_instance['field_name'] == $config->getPublishedFieldId()||
 	 $field_instance['field_name'] == $config->getEditorNotesFieldId();
 }
+
+

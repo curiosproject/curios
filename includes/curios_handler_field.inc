@@ -44,6 +44,7 @@ class curios_link_target_rewriter extends views_handler_field {
     $target_view = $config->getViewSpec($targets[$subject_id]);
     $target_path = $target_view->getPath();
     $this->options['alter']['path'] =  $target_path. strstr($this->options['alter']['path'], '/');
+  
     return parent::render($values);
   }
 }
@@ -62,8 +63,11 @@ class curios_image_thumbnail_field extends views_handler_field {
     $image_url_field = $config->getImageResourceId() .'_'. $config->getURLFieldId();
     $image_url = $values->$image_url_field;
     $image_url = str_replace('http://www.hebrideanconnections.com/', 'http://www.dotrural.ac.uk/curiosdemo/', $image_url);
-    $title = $values->{$this->options['title_field']};
-
+    $moreinfo_link = '';
+    if (isset($this->options['view_path']) && isset($this->options['view_path']))
+    	$moreinfo_link =  ' <a href=\''.$GLOBALS['base_path'] .$this->options['view_path'].'/'.$values->{$this->options['id_field']}.'\'>('.t('more info').')</a>';
+    $title = $values->{$this->options['title_field']} .$moreinfo_link ;
+    
     if (isset($this->options['disable_thumbnail']) && $this->options['disable_thumbnail'] = TRUE) { // Display full size image.
       $image_output = "<a href=\"$image_url\" title=\"$title\" rel=\"lightbox[gallery]\"><img src=\"$image_url\" alt=\"$title\" /></a>";
     } else { // Generate thumbnail.

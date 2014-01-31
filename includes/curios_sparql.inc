@@ -297,7 +297,75 @@ function _curios_fetch_subject_types($subject_id) {
 
   return $classes;
 }
+/*
+ * Get all maintainers of a record
+ */
 
+function _curios_fetch_subject_maintainers($subject_id) {
+  $config = curios_configuration();
+  $prefix = $config->getPrefix($config->getDefaultNamespace());
+  $record = "$prefix:$subject_id";
+
+  $maintainer_field = $config->getField($config->getMaintainerFieldId());
+  $maintainer_property = $maintainer_field->getRDFPredicate();
+
+  $query = "PREFIX hc: <http://www.hebrideanconnections.com/hebridean.owl#> select ?maintainedBy where { $record $maintainer_property ?maintainedBy .}";
+  $rs = __curios_sparql_query($query);
+
+  $maintainers = array();
+  foreach ($rs['result']['rows'] as $row) {
+    $maintainers[] = $row['maintainedBy'];
+  }
+
+  return $maintainers;
+}
+
+/*
+ * Get the owner of a record
+ */
+
+function _curios_fetch_subject_owner($subject_id) {
+  $config = curios_configuration();
+  $prefix = $config->getPrefix($config->getDefaultNamespace());
+  $record = "$prefix:$subject_id";
+
+  $owner_field = $config->getField($config->getOwnerFieldId());
+  $owner_property = $owner_field->getRDFPredicate();
+
+  $query = "PREFIX hc: <http://www.hebrideanconnections.com/hebridean.owl#> select ?ownedBy where { $record $owner_property ?ownedBy .}  LIMIT 1";
+  $rs = __curios_sparql_query($query);
+
+  $owner = array();
+  foreach ($rs['result']['rows'] as $row) {
+    $owner[] = $row['ownedBy'];
+  }
+
+  return $owner;
+}
+
+
+/*
+ * Get the owner of a record
+ */
+
+function _curios_fetch_subject_visibility($subject_id) {
+  $config = curios_configuration();
+  $prefix = $config->getPrefix($config->getDefaultNamespace());
+  $record = "$prefix:$subject_id";
+
+  $published_field = $config->getField($config->getPublishedFieldId());
+  $published_property = $published_field->getRDFPredicate();
+
+  $query = "PREFIX hc: <http://www.hebrideanconnections.com/hebridean.owl#> select ?published where { $record $published_property ?published .}  LIMIT 1";
+  $rs = __curios_sparql_query($query);
+
+  foreach ($rs['result']['rows'] as $row) {
+    if (strcasecmp("yes",$row['published'])==0)
+	return TRUE;
+  }
+
+  return FALSE;
+}
 
 //// -- CONFIGURATION --
 //

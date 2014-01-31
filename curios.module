@@ -65,10 +65,36 @@ function curios_init() {
 function curios_permission() {
   return array(
     'curios manage repository' => array(
-      'title' => t('Manage Repository'),
-      'description' => t('Create, edit, delete items in the CURIOS repository.'),
+      'title' => t('View administrative tasks'),
+      'description' => t('View links to administrative tasks/menu. Recommended to give it to everyone with either editing or validating permission.'),
       'restrict access' => TRUE,
     ),
+   'curios view pending records' => array(
+      'title' => t('View All Pending Records'),
+      'description' => t('Can view records\' listing/details regardless their status. For validators and administrators.'),
+      'restrict access' => TRUE,
+    ),
+    'curios create new records' => array(
+      'title' => t('Create New Records'),
+      'description' => t('Can create new records. The newly-created records will be the user\'s society code.'),
+      'restrict access' => FALSE,
+    ),
+    'curios edit own records' => array(
+      'title' => t('Edit Own Records'),
+      'description' => t('Can edit, delete records maintained by his/her society but cannot change record status to publication. Records after editting will be marked as \'pending\''),
+      'restrict access' => TRUE,
+    ),
+    'curios validate own records' => array(
+      'title' => t('Validate Own Records'),
+      'description' => t('Can validate a record maintained by his/her society.'),
+      'restrict access' => TRUE,
+   ),   
+    'curios manage all records' => array(
+      'title' => t('Edit and Validate All Records'),
+      'description' => t('Can edit, delete, validate all records. Only give this permission to data administrators ONLY.'),
+      'restrict access' => TRUE,
+    ),
+ 
   );
 }
 
@@ -107,7 +133,7 @@ function curios_menu() {
   $items['curios/manage/create'] = array(
     'title' => t('Create New Record'),
     'page callback' => 'curios_insert_page',
-    'access arguments' => array('curios manage repository'),
+    'access arguments' => array('curios create new records'),
     'description' => t('Create a new record'),
      //'type' => MENU_DEFAULT_LOCAL_TASK,
     'type' => MENU_LOCAL_TASK,
@@ -115,7 +141,7 @@ function curios_menu() {
   );
   $items['curios/manage/create/%curios_resource_type'] = array(
     'page callback' => 'curios_insert_form_page',
-    'access arguments' => array('curios manage repository'),
+    'access arguments' => array('curios create new records'),
     'type' => MENU_LOCAL_TASK,
     'page arguments' => array(3),
     'tab parent' => 'curios/manage/create',
@@ -303,7 +329,7 @@ function curios_search_engine_form_submit($form, &$form_state) {
  */
 function curios_rdf_mapping() {
   if (!variable_get('ldcms_installed')) {
-    return;
+    return array();
   }
 
   $config = curios_configuration();
@@ -344,3 +370,5 @@ function curios_cron(){
    _curios_trigger_inference();
  
 }
+
+

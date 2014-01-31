@@ -65,8 +65,261 @@ function curios_views_default_views() {
       $views[$view_name.'_update'] = __curios_generate_default_view_for_update($view_spec);
     }
   }
-  
+ // $views['pending_records'] = __curios_generate_pending_records_views();
   return $views;
+}
+
+
+function __curios_generate_pending_records_views()
+{
+   $config = curios_configuration();
+  $config_endpoints = $config->getEndpoints();
+   $resource_name = 'hc_subject';
+  // Base fields: URI, dc:title, dc:description.
+  $base_fields = array(
+    'title'       => $resource_name.'_'.$config->getTitleFieldId(),
+    'description' => $resource_name.'_'.$config->getDescriptionFieldId(),
+    'published' =>   $resource_name.'_'.$config->getPublishedFieldId(),
+    'maintainers' => $resource_name.'_'.$config->getMaintainerFieldId(),
+);
+  $table_id = _curios_get_table_id_from_uri($config_endpoints['noinference']['query']);
+
+
+$view = new view();
+$view->name = 'pending_records';
+$view->description = '';
+$view->tag = 'default';
+$view->base_table = $table_id;
+$view->human_name = 'Pending records';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Pending records';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'none';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['distinct'] = FALSE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '20';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['default_row_class'] = FALSE;
+$handler->display->display_options['style_options']['row_class_special'] = FALSE;
+$handler->display->display_options['style_options']['columns'] = array(
+  $base_fields['title'] => $base_fields['title'],
+  'hc_subject_hc_description' => 'hc_subject_hc_description',
+  'hc_subject_hc_approved_for_pub' => 'hc_subject_hc_approved_for_pub',
+  'hc_subject_hc_maintained_by_society' => 'hc_subject_hc_maintained_by_society',
+  'hc_subject_hc_owned_by_society' => 'hc_subject_hc_owned_by_society',
+  'hc_subject_hc_subject_id' => 'hc_subject_hc_subject_id',
+  'hc_subject_type' => 'hc_subject_type',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+
+$handler->display->display_options['style_options']['info'] = array(
+  'hc_subject_hc_title' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'hc_subject_hc_description' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'hc_subject_hc_approved_for_pub' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'hc_subject_hc_maintained_by_society' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'hc_subject_hc_owned_by_society' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'hc_subject_hc_subject_id' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'hc_subject_type' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+$handler->display->display_options['style_options']['override'] = FALSE;
+/* Field: Title */
+$handler->display->display_options['fields']['hc_subject_hc_title']['id'] = 'hc_subject_hc_title';
+$handler->display->display_options['fields']['hc_subject_hc_title']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_hc_title']['field'] = 'hc_subject_hc_title';
+$handler->display->display_options['fields']['hc_subject_hc_title']['alter']['url_encode'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_title']['required'] = 1;
+$handler->display->display_options['fields']['hc_subject_hc_title']['exists'] = 0;
+/* Field: Description */
+$handler->display->display_options['fields']['hc_subject_hc_description']['id'] = 'hc_subject_hc_description';
+$handler->display->display_options['fields']['hc_subject_hc_description']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_hc_description']['field'] = 'hc_subject_hc_description';
+$handler->display->display_options['fields']['hc_subject_hc_description']['alter']['url_encode'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_description']['type'] = 'text_trimmed';
+$handler->display->display_options['fields']['hc_subject_hc_description']['required'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_description']['exists'] = 0;
+/* Field: Published */
+$handler->display->display_options['fields']['hc_subject_hc_approved_for_pub']['id'] = 'hc_subject_hc_approved_for_pub';
+$handler->display->display_options['fields']['hc_subject_hc_approved_for_pub']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_hc_approved_for_pub']['field'] = 'hc_subject_hc_approved_for_pub';
+$handler->display->display_options['fields']['hc_subject_hc_approved_for_pub']['alter']['url_encode'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_approved_for_pub']['required'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_approved_for_pub']['exists'] = 0;
+/* Field: Record Maintained By */
+$handler->display->display_options['fields']['hc_subject_hc_maintained_by_society']['id'] = 'hc_subject_hc_maintained_by_society';
+$handler->display->display_options['fields']['hc_subject_hc_maintained_by_society']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_hc_maintained_by_society']['field'] = 'hc_subject_hc_maintained_by_society';
+$handler->display->display_options['fields']['hc_subject_hc_maintained_by_society']['alter']['url_encode'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_maintained_by_society']['required'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_maintained_by_society']['exists'] = 0;
+/* Field: Record Owned By */
+$handler->display->display_options['fields']['hc_subject_hc_owned_by_society']['id'] = 'hc_subject_hc_owned_by_society';
+$handler->display->display_options['fields']['hc_subject_hc_owned_by_society']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_hc_owned_by_society']['field'] = 'hc_subject_hc_owned_by_society';
+$handler->display->display_options['fields']['hc_subject_hc_owned_by_society']['alter']['url_encode'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_owned_by_society']['required'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_owned_by_society']['exists'] = 0;
+/* Field: Subject Id */
+$handler->display->display_options['fields']['hc_subject_hc_subject_id']['id'] = 'hc_subject_hc_subject_id';
+$handler->display->display_options['fields']['hc_subject_hc_subject_id']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_hc_subject_id']['field'] = 'hc_subject_hc_subject_id';
+$handler->display->display_options['fields']['hc_subject_hc_subject_id']['alter']['url_encode'] = 0;
+$handler->display->display_options['fields']['hc_subject_hc_subject_id']['required'] = 1;
+$handler->display->display_options['fields']['hc_subject_hc_subject_id']['exists'] = 0;
+/* Field: RDF type */
+$handler->display->display_options['fields']['hc_subject_type']['id'] = 'hc_subject_type';
+$handler->display->display_options['fields']['hc_subject_type']['table'] = $view->base_table;
+$handler->display->display_options['fields']['hc_subject_type']['field'] = 'hc_subject_type';
+/* Filter criterion: Published */
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['id'] = 'hc_subject_hc_approved_for_pub';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['table'] = $view->base_table;
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['field'] = 'hc_subject_hc_approved_for_pub';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['operator'] = '~=';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['value'] = 'pending';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['exposed'] = TRUE;
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['expose']['operator_id'] = 'hc_subject_hc_approved_for_pub_op';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['expose']['label'] = 'Published';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['expose']['operator'] = 'hc_subject_hc_approved_for_pub_op';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['expose']['identifier'] = 'hc_subject_hc_approved_for_pub';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+);
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['is_grouped'] = TRUE;
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['group_info']['label'] = 'Published';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['group_info']['identifier'] = 'hc_subject_hc_approved_for_pub';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['group_info']['default_group'] = '1';
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['group_info']['group_items'] = array(
+  1 => array(
+    'title' => 'Pending',
+    'operator' => '~=',
+    'value' => 'pending',
+  ),
+  2 => array(
+    'title' => 'Yes',
+    'operator' => '~=',
+    'value' => 'yes',
+  ),
+  3 => array(
+    'title' => 'No',
+    'operator' => '~=',
+    'value' => 'no',
+  ),
+);
+$handler->display->display_options['filters']['hc_subject_hc_approved_for_pub']['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+/* Filter criterion: Record Maintained By */
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['id'] = 'hc_subject_hc_maintained_by_society';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['table'] = $view->base_table;
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['field'] = 'hc_subject_hc_maintained_by_society';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['operator'] = '~=';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['exposed'] = TRUE;
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['expose']['operator_id'] = 'hc_subject_hc_maintained_by_society_op';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['expose']['label'] = 'Record Maintained By';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['expose']['operator'] = 'hc_subject_hc_maintained_by_society_op';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['expose']['identifier'] = 'hc_subject_hc_maintained_by_society';
+$handler->display->display_options['filters']['hc_subject_hc_maintained_by_society']['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+/* Filter criterion: Record Owned By */
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['id'] = 'hc_subject_hc_owned_by_society';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['table'] = $view->base_table;
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['field'] = 'hc_subject_hc_owned_by_society';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['operator'] = '~=';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['exposed'] = TRUE;
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['expose']['operator_id'] = 'hc_subject_hc_owned_by_society_op';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['expose']['label'] = 'Record Owned By';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['expose']['operator'] = 'hc_subject_hc_owned_by_society_op';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['expose']['identifier'] = 'hc_subject_hc_owned_by_society';
+$handler->display->display_options['filters']['hc_subject_hc_owned_by_society']['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+
+/* Filter criterion: type */
+$handler->display->display_options['filters']['hc_subject_type']['id'] = 'hc_subject_type';
+$handler->display->display_options['filters']['hc_subject_type']['table'] = $view->base_table;
+$handler->display->display_options['filters']['hc_subject_type']['field'] = 'hc_subject_type';
+$handler->display->display_options['filters']['hc_subject_type']['operator'] = '~=';
+$handler->display->display_options['filters']['hc_subject_type']['exposed'] = TRUE;
+$handler->display->display_options['filters']['hc_subject_type']['expose']['operator_id'] = 'hc_subject_type_op';
+$handler->display->display_options['filters']['hc_subject_type']['expose']['label'] = 'Record Owned By';
+$handler->display->display_options['filters']['hc_subject_type']['expose']['operator'] = 'hc_subject_type_op';
+$handler->display->display_options['filters']['hc_subject_type']['expose']['identifier'] = 'hc_subject_type';
+$handler->display->display_options['filters']['hc_subject_type']['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+
+/* Display: pending-records */
+$handler = $view->new_display('page', 'pending-records', 'page');
+$handler->display->display_options['defaults']['access'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['path'] = 'pending-records';
+$handler->display->display_options['menu']['type'] = 'normal';
+$handler->display->display_options['menu']['title'] = 'Pending records';
+$handler->display->display_options['menu']['weight'] = '0';
+$handler->display->display_options['menu']['name'] = 'main-menu';
+$handler->display->display_options['menu']['context'] = 0;
+$handler->display->display_options['menu']['context_only_inline'] = 0;
+
+return $view;
+
 }
 
 /**
@@ -120,7 +373,10 @@ function __curios_generate_default_view_for_update(&$view_spec) {
 
   // Primary views for updateform.
   __curios_generate_display('master', $view, $view_spec, $base_fields);
- // __curios_generate_display('listing', $view, $view_spec, $base_fields);
+  // no pending records for "all records"  
+  if ($resource_name != $config->getDefaultResourceId())
+	  __curios_generate_display('pending_records', $view, $view_spec, $base_fields);
+
   __curios_generate_display('summary', $view, $view_spec, $base_fields);
   __curios_generate_display('properties', $view, $view_spec, $base_fields);
   __curios_generate_display('images', $view, $view_spec, $base_fields);
@@ -167,7 +423,9 @@ function __curios_generate_default_view(&$view_spec) {
 
   // Primary views.
   __curios_generate_display('master', $view, $view_spec, $base_fields);
-  __curios_generate_display('listing', $view, $view_spec, $base_fields);
+  // no listing view for "all records"  
+  if ($resource_name != $config->getDefaultResourceId())
+	  __curios_generate_display('listing', $view, $view_spec, $base_fields);
   __curios_generate_display('summary', $view, $view_spec, $base_fields);
   __curios_generate_display('properties', $view, $view_spec, $base_fields);
   __curios_generate_display('images', $view, $view_spec, $base_fields);
@@ -364,17 +622,7 @@ function __curios_generate_display_summary_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
   $handler->display->display_options['fields'][$field_name]['alter']['path'] = $view_spec->getPath().'/';
 
-    // Field: update link to trigger recomputation of inferences
-  $field_name = 'updatelink';
-  $handler->display->display_options['fields'][$field_name]['id'] = $field_name;
-  $handler->display->display_options['fields'][$field_name]['table'] = 'views';
-  $handler->display->display_options['fields'][$field_name]['field'] = 'nothing';
-  $handler->display->display_options['fields'][$field_name]['ui_name'] = 'Update record';
-  $handler->display->display_options['fields'][$field_name]['label'] = '';
-  $handler->display->display_options['fields'][$field_name]['alter']['text'] = 'Make this record up-to-date';
-  $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
-  $handler->display->display_options['fields'][$field_name]['alter']['path'] = 'curios/manage/recompute-inferences/'.$view_spec->getPath()."/[$subject_id_field]";
-
+  
   // Contextual filters.
   __curios_uri_filter($handler, $view, $view_spec);
   __curios_rdf_type_filter($handler, $view, $view_spec);
@@ -708,6 +956,7 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
   $resource_name = $resource->getMachineName();
   $image_file = $resource_name.'_'.$config->getImageRelationshipFieldId();
   $subject_id_field = $resource_name.'_'.$config->getIdentifierFieldId();
+  $published_field = $resource_name.'_'.$config->getPublishedFieldId();
   
   $handler = $view->new_display('block', 'Listing', 'listing');
   
@@ -743,6 +992,7 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
     $resource_name => $resource_name,
     $base_fields['title'] => $base_fields['title'],
     $base_fields['description'] => $base_fields['description'],
+    $published_field => $published_field,
     $image_file => $image_file,
     'subject_id_rewrite' => 'subject_id_rewrite',
   );
@@ -761,6 +1011,12 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
       'separator' => '',
     ),
     $base_fields['description'] => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+   $published_field => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -831,6 +1087,17 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields'][$base_fields['description']]['element_default_classes'] = 1;
   $handler->display->display_options['fields'][$base_fields['description']]['required'] = 0;
 
+
+  /* Field: Published */
+ $handler->display->display_options['fields'][$published_field]['id'] = $base_fields['published'];
+ $handler->display->display_options['fields'][$published_field]['table'] = $view->base_table;
+ $handler->display->display_options['fields'][$published_field]['field'] = $base_fields['published'];
+ $handler->display->display_options['fields'][$published_field]['alter']['url_encode'] = 0;
+ $handler->display->display_options['fields'][$published_field]['required'] = 0;
+ $handler->display->display_options['fields'][$published_field]['exists'] = 0;
+ $handler->display->display_options['fields'][$published_field]['exclude'] = TRUE;
+
+
   /* Field: HasFile */
   $handler->display->display_options['fields'][$image_file]['id'] = $image_file;
   $handler->display->display_options['fields'][$image_file]['table'] = $view->base_table;
@@ -849,10 +1116,20 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields']['subject_id_rewrite']['field'] = 'nothing';
   $handler->display->display_options['fields']['subject_id_rewrite']['label'] = 'Id';
   $handler->display->display_options['fields']['subject_id_rewrite']['alter']['text'] = '['.$subject_id_field.']';
-
+ 
   // Contextual filters.
   __curios_rdf_type_filter($handler, $view, $view_spec);
-  
+ 
+ /* Filter: Published */
+ $handler->display->display_options['filters'][$published_field]['id'] = $published_field;
+ $handler->display->display_options['filters'][$published_field]['table'] = $view->base_table;
+ $handler->display->display_options['filters'][$published_field]['field'] = $published_field;
+ $handler->display->display_options['filters'][$published_field]['operator'] = '~=';
+ $handler->display->display_options['filters'][$published_field]['value'] = 'yes';
+ $handler->display->display_options['filters'][$published_field]['sparql_options'] = array(
+    'value_type' => 'string',
+    'language' => '0',
+  );
   // Exposed filter: title.
   $handler->display->display_options['filters'][$base_fields['title']]['id'] = $base_fields['title'];
   $handler->display->display_options['filters'][$base_fields['title']]['table'] = $view->base_table;
@@ -988,6 +1265,8 @@ function __curios_generate_display_images_default(&$view, &$view_spec, $base_fie
   $handler->display->display_options['fields']['curios_link_target_rewriter']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['curios_link_target_rewriter']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['curios_link_target_rewriter']['title_field'] = $base_fields['title'];
+  $handler->display->display_options['fields']['curios_link_target_rewriter']['id_field'] = $subject_id_field;
+  $handler->display->display_options['fields']['curios_link_target_rewriter']['view_path'] = $image_view_spec->getPath();
   
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -1091,6 +1370,19 @@ function __curios_generate_display_admin_tools_default(&$view, &$view_spec, $bas
     $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
     $handler->display->display_options['fields'][$field_name]['alter']['path'] = $admin_edit_path.'/['.$subject_id_field.']';
   }
+  // Field: update link to trigger recomputation of inferences
+  $field_name = 'updatelink';
+  $handler->display->display_options['fields'][$field_name]['id'] = $field_name;
+  $handler->display->display_options['fields'][$field_name]['table'] = 'views';
+  $handler->display->display_options['fields'][$field_name]['field'] = 'nothing';
+  $handler->display->display_options['fields'][$field_name]['ui_name'] = 'Update record';
+  $handler->display->display_options['fields'][$field_name]['label'] = '';
+  $handler->display->display_options['fields'][$field_name]['alter']['text'] = '[ Update all relationships ]';
+  $handler->display->display_options['fields'][$field_name]['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
+  $handler->display->display_options['fields'][$field_name]['element_wrapper_class'] = 'views-field-curios-admin-edit-link';
+  $handler->display->display_options['fields'][$field_name]['alter']['path'] = 'curios/manage/recompute-inferences/'.$view_spec->getPath()."/[$subject_id_field]";
+
 
   // Contextual filters.
   __curios_uri_filter($handler, $view, $view_spec);
@@ -1202,6 +1494,300 @@ function __curios_generate_display_record_meta_default(&$view, &$view_spec, $bas
 
   return $handler;
 }
+
+
+/**
+ * Generates the default pending-record page view.
+ */
+function __curios_generate_display_pending_records_default(&$view, &$view_spec, $base_fields) {
+  $config = curios_configuration();
+  $resource = $view_spec->getResource();
+  $resource_name = $resource->getMachineName();
+  $image_file = $resource_name.'_'.$config->getImageRelationshipFieldId();
+  $subject_id_field = $resource_name.'_'.$config->getIdentifierFieldId();
+  $base_fields = array(
+    'title'       => $resource_name.'_'.$config->getTitleFieldId(),
+    'description' => $resource_name.'_'.$config->getDescriptionFieldId(),
+    'published' =>   $resource_name.'_'.$config->getPublishedFieldId(),
+    'maintainers' => $resource_name.'_'.$config->getMaintainerFieldId(),
+    'owner' => $resource_name.'_'.$config->getOwnerFieldId(),
+);
+
+/* Display: pending-records */
+$handler = $view->new_display('page', 'Pending Records', 'page');
+$handler->display->display_options['defaults']['access'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['path'] = 'pending-records/'.$view_spec->getPath();
+$handler->display->display_options['menu']['type'] = 'normal';
+$handler->display->display_options['menu']['title'] = $view_spec->getLabel();
+$handler->display->display_options['menu']['weight'] = '0';
+$handler->display->display_options['menu']['name'] = 'menu-pending';
+$handler->display->display_options['menu']['context'] = 0;
+$handler->display->display_options['menu']['context_only_inline'] = 0;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['access']['perm'] = 'curios view pending records';
+
+$handler->display->display_options['query']['options']['consolidate'] = TRUE;
+  
+  // Path, menu etc.
+  $handler->display->display_options['title'] = $view_spec->getLabel(). ' Pending Records';
+  
+  // Overrides.
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+
+  // Pager options.
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
+  
+
+  // Table options.
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    $resource_name => $resource_name,
+    $subject_id_field => $subject_id_field,
+    $base_fields['title'] => $base_fields['title'],
+    $base_fields['description'] => $base_fields['description'],
+    $base_fields['published'] => $base_fields['published'],
+    $base_fields['maintainers'] =>     $base_fields['maintainers'],
+    $base_fields['owner'] =>     $base_fields['owner'],
+
+    'subject_id_rewrite' => 'subject_id_rewrite',
+  );
+  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['info'] = array(
+    $resource_name => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+
+$subject_id_field  => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    $base_fields['title'] => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    $base_fields['description'] => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    $base_fields['published'] => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    $base_fields['maintainers'] => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    $base_fields['owner'] => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'subject_id_rewrite' => array(
+      'align' => 'views-align-right',
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+ 
+  );
+  $handler->display->display_options['style_options']['override'] = 1;
+  $handler->display->display_options['style_options']['sticky'] = 0;
+  $handler->display->display_options['style_options']['empty_table'] = 0;
+  
+  // Field: URI.
+  $handler->display->display_options['fields'][$resource_name]['id'] = $resource_name;
+  $handler->display->display_options['fields'][$resource_name]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$resource_name]['field'] = $resource_name;
+  $handler->display->display_options['fields'][$resource_name]['exclude'] = TRUE;
+ 
+  // Field: subject id.
+  $handler->display->display_options['fields'][$subject_id_field]['id'] = $subject_id_field;
+  $handler->display->display_options['fields'][$subject_id_field]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$subject_id_field]['field'] = $subject_id_field;
+ // $handler->display->display_options['fields'][$subject_id_field]['exclude'] = TRUE;
+  
+  // Field: title.
+  $handler->display->display_options['fields'][$base_fields['title']]['id'] = $base_fields['title'];
+  $handler->display->display_options['fields'][$base_fields['title']]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$base_fields['title']]['field'] = $base_fields['title'];
+  $handler->display->display_options['fields'][$base_fields['title']]['label'] = 'Title';
+  $handler->display->display_options['fields'][$base_fields['title']]['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields'][$base_fields['title']]['alter']['make_link'] = 1;
+  $handler->display->display_options['fields'][$base_fields['title']]['alter']['path'] = $view_spec->getPath().'/['.$subject_id_field.']';
+  $handler->display->display_options['fields'][$base_fields['title']]['element_label_colon'] = 1;
+  $handler->display->display_options['fields'][$base_fields['title']]['element_default_classes'] = 1;
+  $handler->display->display_options['fields'][$base_fields['title']]['required'] = 1;
+  
+  // Field: description.
+  $handler->display->display_options['fields'][$base_fields['description']]['id'] = $base_fields['description'];
+  $handler->display->display_options['fields'][$base_fields['description']]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$base_fields['description']]['field'] = $base_fields['description'];
+  $handler->display->display_options['fields'][$base_fields['description']]['label'] = 'Description';
+  $handler->display->display_options['fields'][$base_fields['description']]['type'] = 'text_default';
+  $handler->display->display_options['fields'][$base_fields['description']]['alter']['trim'] = 1;
+  $handler->display->display_options['fields'][$base_fields['description']]['alter']['max_length'] = '220';
+  $handler->display->display_options['fields'][$base_fields['description']]['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields'][$base_fields['description']]['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields'][$base_fields['description']]['alter']['strip_tags'] = 1;
+  $handler->display->display_options['fields'][$base_fields['description']]['alter']['html'] = 0;
+  $handler->display->display_options['fields'][$base_fields['description']]['element_label_colon'] = 1;
+  $handler->display->display_options['fields'][$base_fields['description']]['element_default_classes'] = 1;
+  $handler->display->display_options['fields'][$base_fields['description']]['required'] = 0;
+
+/* Field: Published */
+$handler->display->display_options['fields'][$base_fields['published']]['id'] = $base_fields['published'];
+$handler->display->display_options['fields'][$base_fields['published']]['table'] = $view->base_table;
+$handler->display->display_options['fields'][$base_fields['published']]['field'] = $base_fields['published'];
+$handler->display->display_options['fields'][$base_fields['published']]['alter']['url_encode'] = 0;
+$handler->display->display_options['fields'][$base_fields['published']]['required'] = 0;
+$handler->display->display_options['fields'][$base_fields['published']]['exists'] = 0;
+/* Field: Record Maintained By */
+$handler->display->display_options['fields'][$base_fields['maintainers']]['id'] = $base_fields['maintainers'];
+$handler->display->display_options['fields'][$base_fields['maintainers']]['table'] = $view->base_table;
+$handler->display->display_options['fields'][$base_fields['maintainers']]['field'] = $base_fields['maintainers'];
+$handler->display->display_options['fields'][$base_fields['maintainers']]['alter']['url_encode'] = 0;
+$handler->display->display_options['fields'][$base_fields['maintainers']]['required'] = 0;
+$handler->display->display_options['fields'][$base_fields['maintainers']]['exists'] = 0;
+// Field: Record Owned By 
+$handler->display->display_options['fields'][$base_fields['owner']]['id'] = $base_fields['owner'];
+$handler->display->display_options['fields'][$base_fields['owner']]['table'] = $view->base_table;
+$handler->display->display_options['fields'][$base_fields['owner']]['field'] = $base_fields['owner'];
+$handler->display->display_options['fields'][$base_fields['owner']]['alter']['url_encode'] = 0;
+$handler->display->display_options['fields'][$base_fields['owner']]['required'] = 0;
+$handler->display->display_options['fields'][$base_fields['owner']]['exists'] = 0;
+
+  $handler->display->display_options['fields']['subject_id_rewrite']['id'] = 'subject_id_rewrite';
+  $handler->display->display_options['fields']['subject_id_rewrite']['table'] = 'views';
+  $handler->display->display_options['fields']['subject_id_rewrite']['field'] = 'nothing';
+  $handler->display->display_options['fields']['subject_id_rewrite']['label'] = 'Id';
+  $handler->display->display_options['fields']['subject_id_rewrite']['alter']['text'] = '['.$subject_id_field.']';
+  $handler->display->display_options['fields']['subject_id_rewrite']['exclude'] = TRUE;
+  
+
+/* Filter criterion: Published */
+$handler->display->display_options['filters'][$base_fields['published']]['id'] = $base_fields['published'];
+$handler->display->display_options['filters'][$base_fields['published']]['table'] = $view->base_table;
+$handler->display->display_options['filters'][$base_fields['published']]['field'] = $base_fields['published'];
+$handler->display->display_options['filters'][$base_fields['published']]['operator'] = '~=';
+//$handler->display->display_options['filters'][$base_fields['published']]['value'] = 'pending';
+$handler->display->display_options['filters'][$base_fields['published']]['exposed'] = TRUE;
+$handler->display->display_options['filters'][$base_fields['published']]['expose']['operator_id'] = $resource_name.'_'.$base_fields['published'].'_op';
+$handler->display->display_options['filters'][$base_fields['published']]['expose']['label'] = 'Published';
+$handler->display->display_options['filters'][$base_fields['published']]['expose']['operator'] = $resource_name.'_'.$base_fields['published'].'_op';
+$handler->display->display_options['filters'][$base_fields['published']]['expose']['identifier'] = $base_fields['published'];
+$handler->display->display_options['filters'][$base_fields['published']]['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+);
+$handler->display->display_options['filters'][$base_fields['published']]['is_grouped'] = TRUE;
+$handler->display->display_options['filters'][$base_fields['published']]['group_info']['label'] = 'Published';
+$handler->display->display_options['filters'][$base_fields['published']]['group_info']['identifier'] = $base_fields['published'];
+$handler->display->display_options['filters'][$base_fields['published']]['group_info']['default_group'] = '1';
+$handler->display->display_options['filters'][$base_fields['published']]['group_info']['group_items'] = array(
+  1 => array(
+    'title' => 'Pending',
+    'operator' => '~=',
+    'value' => 'pending',
+  ),
+  2 => array(
+    'title' => 'Yes',
+    'operator' => '~=',
+    'value' => 'yes',
+  ),
+  3 => array(
+    'title' => 'No',
+    'operator' => '~=',
+    'value' => 'no',
+  ),
+);
+$handler->display->display_options['filters'][$base_fields['published']]['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+
+// Exposed filter: title.
+  $handler->display->display_options['filters'][$base_fields['title']]['id'] = $base_fields['title'];
+  $handler->display->display_options['filters'][$base_fields['title']]['table'] = $view->base_table;
+  $handler->display->display_options['filters'][$base_fields['title']]['field'] = $base_fields['title'];
+  $handler->display->display_options['filters'][$base_fields['title']]['operator'] = 'search';
+  $handler->display->display_options['filters'][$base_fields['title']]['exposed'] = TRUE;
+  $handler->display->display_options['filters'][$base_fields['title']]['expose']['operator_id'] = $base_fields['title'].'_op';
+  $handler->display->display_options['filters'][$base_fields['title']]['expose']['label'] = 'Search '.$view_spec->getLabel();
+  $handler->display->display_options['filters'][$base_fields['title']]['expose']['operator'] = $base_fields['title'].'_op';
+  $handler->display->display_options['filters'][$base_fields['title']]['expose']['identifier'] = 'name';
+  $handler->display->display_options['filters'][$base_fields['title']]['expose']['required'] = 0;
+  $handler->display->display_options['filters'][$base_fields['title']]['expose']['multiple'] = FALSE;
+  $handler->display->display_options['filters'][$base_fields['title']]['sparql_options'] = array(
+    'value_type' => 'string',
+    'language' => '0',
+  );
+
+/* Filter criterion: Record Maintained By */
+$handler->display->display_options['filters'][$base_fields['maintainers']]['id'] = $base_fields['maintainers'];
+$handler->display->display_options['filters'][$base_fields['maintainers']]['table'] = $view->base_table;
+$handler->display->display_options['filters'][$base_fields['maintainers']]['field'] = $base_fields['maintainers'];
+$handler->display->display_options['filters'][$base_fields['maintainers']]['operator'] = '~=';
+$handler->display->display_options['filters'][$base_fields['maintainers']]['exposed'] = TRUE;
+$handler->display->display_options['filters'][$base_fields['maintainers']]['expose']['operator_id'] = $resource_name.'_'.$base_fields['maintainers'].'_op';
+$handler->display->display_options['filters'][$base_fields['maintainers']]['expose']['label'] = 'Record Maintained By';
+$handler->display->display_options['filters'][$base_fields['maintainers']]['expose']['operator'] = $resource_name.'_'.$base_fields['maintainers'].'_op';
+$handler->display->display_options['filters'][$base_fields['maintainers']]['expose']['identifier'] = $base_fields['maintainers'];
+$handler->display->display_options['filters'][$base_fields['maintainers']]['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+
+/* Filter criterion: Record Owned By */
+$handler->display->display_options['filters'][$base_fields['owner']]['id'] = $base_fields['owner'];
+$handler->display->display_options['filters'][$base_fields['owner']]['table'] = $view->base_table;
+$handler->display->display_options['filters'][$base_fields['owner']]['field'] = $base_fields['owner'];
+$handler->display->display_options['filters'][$base_fields['owner']]['operator'] = '~=';
+$handler->display->display_options['filters'][$base_fields['owner']]['exposed'] = TRUE;
+$handler->display->display_options['filters'][$base_fields['owner']]['expose']['operator_id'] = $resource_name.'_'.$base_fields['owner'].'_op';
+$handler->display->display_options['filters'][$base_fields['owner']]['expose']['label'] = 'Record Owned By';
+$handler->display->display_options['filters'][$base_fields['owner']]['expose']['operator'] = $resource_name.'_'.$base_fields['owner'].'_op';
+$handler->display->display_options['filters'][$base_fields['owner']]['expose']['identifier'] = $base_fields['owner'];
+$handler->display->display_options['filters'][$base_fields['owner']]['sparql_options'] = array(
+  'value_type' => 'string',
+  'language' => '0',
+);
+
+  // Contextual filters.
+  __curios_rdf_type_filter($handler, $view, $view_spec);
+
+  return $handler;
+}
+
+
 
 /**
  * Filters a view by individual URI.

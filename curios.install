@@ -57,6 +57,7 @@ function curios_schema() {
  * Registers endpoint, creates menu for record types, sets default configuration file.
  */
 function curios_install() {
+
   // Register end point.
   $config_endpoints = curios_endpoints();
   $endpoints = array();
@@ -70,14 +71,7 @@ function curios_install() {
   );
   sparql_views_register_endpoints($endpoints);
   
-  // Create record types menu.
-  $menu = array(
-    'menu_name' => 'menu-curios',
-    'title' => 'Record Types',
-    'description' => 'CURIOS menu',
-  );
-  menu_save($menu);
-  __curios_activate_block('menu', 'menu-curios', 'sidebar_first', 'bartik', '', '0');
+
 
   // Default to Hebridean Connections configuration.
   variable_set('ldcms_config', 'hebridean.ldcms.inc');
@@ -93,6 +87,102 @@ function curios_install() {
  * Implements hook_uninstall.
  */
 function curios_uninstall() {
-  variable_del('ldcms_installed');
+// clean up taxonomy
+ $groupcode_vocabulary = taxonomy_vocabulary_machine_name_load('tax_groupcodes');
+ taxonomy_vocabulary_delete($groupcode_vocabulary->vid);
+
+//delete menus
+$menu1 = array(
+    'menu_name' => 'menu-curios',
+    'title' => 'Record Types',
+    'description' => 'CURIOS menu',
+  );
+$menu2 = array(
+    'menu_name' => 'menu-pending',
+    'title' => 'Pending Records',
+    'description' => 'Pending records for administrative tasks (validation/editing)',
+  );
+menu_delete ($menu1);
+menu_delete ($menu2);
+
+   // Clear caches.
+  cache_clear_all(NULL, 'cache_views', TRUE);
+  menu_rebuild();
+  cache_clear_all(NULL, 'cache_block');
+
   // TODO clean up.
+
+  variable_del('ldcms_installed');
+
+}
+
+
+function curios_enable(){
+
+// create a taxonomy for groupcodes
+$term =  taxonomy_vocabulary_machine_name_load('tax_groupcodes');
+if (!$term)
+{
+  $term = new stdClass();
+  $term->name = 'Society';
+  $term->machine_name = 'tax_groupcodes';
+  $term->description = t('This taxonomy stores group codes of the historical societies.');
+  $term->heirarchy = 1;
+  $term->module = 'curios';
+  $term->weight = 1;
+  taxonomy_vocabulary_save($term);
+}
+
+// Check if group_code field is not already created for users.
+if (!field_info_field('field_curios_group_code')) {
+    $field = array(
+        'field_name' => 'field_curios_group_code', 
+        'type' => 'taxonomy_term_reference', 
+        'settings' => array(
+         'allowed_values' => array(
+		array(
+		  'vocabulary' => 'tax_groupcodes',
+		  'parent' => 0
+		),
+     	  ),
+    	),
+        
+    );
+    field_create_field($field);
+
+    // Create the instance on the bundle.
+    $instance = array(
+        'field_name' => 'field_curios_group_code', 
+        'entity_type' => 'user', 
+        'label' => 'Society Code', 
+        'bundle' => 'user', 
+        'widget' => array(
+            'type' => 'taxonomy_autocomplete',
+            'weight' => '1',
+        ), 
+    );
+    field_create_instance($instance);
+  }
+
+  // Create record types menu.
+  $menu = array(
+    'menu_name' => 'menu-curios',
+    'title' => 'Record Types',
+    'description' => 'CURIOS menu',
+  );
+  menu_save($menu);
+  __curios_activate_block('menu', 'menu-curios', 'sidebar_first', 'curios_theme', '', '0');
+
+ // Create pending records menu.
+  $menu = array(
+    'menu_name' => 'menu-pending',
+    'title' => 'Pending Records',
+    'description' => 'Pending records for administrative tasks (validation/editing)',
+  );
+  menu_save($menu);
+  __curios_activate_block('menu', 'menu-pending', 'sidebar_first', 'curios_theme', '', '0');
+   // Clear caches.
+  cache_clear_all(NULL, 'cache_views', TRUE);
+  menu_rebuild();
+  cache_clear_all(NULL, 'cache_block');
 }

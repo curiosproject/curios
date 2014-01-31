@@ -51,8 +51,17 @@ $layout->settings = array(
       'width_type' => '%',
       'children' => array(
         0 => 'main-row',
+	1 => 'comment_region',
       ),
       'parent' => 'canvas',
+    ),
+    'comment_region' => array(
+      'type' => 'region',
+      'title' => 'Comments Region',
+      'width' => 100,
+      'width_type' => '%',
+      'parent' => 'main',
+      'class' => '',
     ),
     'main-row' => array(
       'type' => 'row',
@@ -64,6 +73,7 @@ $layout->settings = array(
       'parent' => 'main',
       'class' => '',
     ),
+    
     2 => array(
       'type' => 'column',
       'width' => '80',

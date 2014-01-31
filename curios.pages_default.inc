@@ -212,30 +212,41 @@ function _curios_generate_details_panel(&$view_spec, $hander_id) {
   $handler->subtask = __panel_page_id($view_spec->getMachineName());
   $handler->handler = 'panel_context';
   $handler->weight = 0;
-  $handler->conf = array(
-    'title' => 'Details',
-    'no_blocks' => 0,
-    'pipeline' => 'ipe',
-    'body_classes_to_remove' => '',
-    'body_classes_to_add' => '',
-    'css_id' => '',
-    'css' => '',
-    'contexts' => array(),
-    'relationships' => array(),
-    'access' => array(
-      'logic' => 'and',
-      'plugins' => array(
-        0 => array(
-          'name' => 'context_exists',
-          'settings' => array(
-            'exists' => '1',
-          ),
-          'context' => 'argument_string_1',
-          'not' => FALSE,
+  
+$handler->conf = array(
+  'title' => 'Details',
+  'no_blocks' => 0,
+  'pipeline' => 'ipe',
+  'body_classes_to_remove' => '',
+  'body_classes_to_add' => '',
+  'css_id' => '',
+  'css' => '',
+  'contexts' => array(),
+  'relationships' => array(),
+  'access' => array(
+    'logic' => 'and',
+    'plugins' => array(
+      0 => array(
+        'name' => 'context_exists',
+        'settings' => array(
+          'exists' => '1',
         ),
+        'context' => 'argument_string_1',
+        'not' => FALSE,
+      ),
+// add access rule: user can view this record either if it is visible or the user is granted a permission to view them (curios view pending records)
+      2 => array(
+        'name' => 'php',
+        'settings' => array(
+          'description' => 'Record visibility',
+          'php' => '
+return (user_access(\'curios view pending records\') || curios_is_visible($contexts["argument_string_1"]->data));',
+        ),
+        'not' => FALSE,
       ),
     ),
-  );
+  ),
+);
   $display = new panels_display;
   $display->layout = 'flexible:ldcms_details_page_layout';
   $display->layout_settings = array();
@@ -247,6 +258,7 @@ function _curios_generate_details_panel(&$view_spec, $hander_id) {
       'properties_region' => NULL,
       'image_gallery_region' => NULL,
       'relationships_region' => NULL,
+      'comment_region' => NULL,
     ),
   );
   $display->cache = array();
@@ -399,6 +411,82 @@ function _curios_generate_details_panel(&$view_spec, $hander_id) {
     $display->panels['image_gallery_region'][0] = 'image_gallery_pane';
   }
 
+
+  // Comment Region.
+
+  $pane = new stdClass();
+  $pane->pid = 'comment_pane';
+  $pane->panel = 'comment_region';
+  $pane->type = 'custom';
+  $pane->subtype = 'custom';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'admin_title' => '',
+    'title' => '',
+    'body' => ' <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = \'curiosdemo\'; // required: replace example with your forum shortname
+
+        /* * * DON\'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement(\'script\'); dsq.type = \'text/javascript\'; dsq.async = true;
+            dsq.src = \'//\' + disqus_shortname + \'.disqus.com/embed.js\';
+            (document.getElementsByTagName(\'head\')[0] || document.getElementsByTagName(\'body\')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    ',
+    'format' => 'full_html',
+    'substitute' => 1,
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 0;
+  $pane->locks = array();
+  $display->content['comment_pane'] = $pane;
+  $display->panels['comment_region'][0] = 'comment_pane';
+
+ /* $pane = new stdClass;
+  $pane->pid = 'comment_pane';
+  $pane->panel = 'comment_region';
+  $pane->type = 'views';
+  $pane->subtype = $view_spec->getMachineName(); // Name of view.
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'override_pager_settings' => 0,
+    'use_pager' => 0,
+    'nodes_per_page' => '0',
+    'pager_id' => '0',
+    'offset' => '0',
+    'more_link' => 0,
+    'feed_icons' => 0,
+    'panel_args' => 1,
+    'link_to_view' => 0,
+    'args' => '',
+    'url' => '',
+    'display' => 'properties',
+    'override_title' => 0,
+    'override_title_text' => '',
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 0;
+  $pane->locks = array();
+  $display->content['comment_pane'] = $pane;
+  $display->panels['comment_region'][0] = 'comment_pane';
+*/
   // Relationships Region.
   $pane_index = 0;
   foreach ($view_spec->getObjectFields() as $field_id) {
