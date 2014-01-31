@@ -62,7 +62,7 @@ class curios_image_thumbnail_field extends views_handler_field {
     $config = curios_configuration();
     $image_url_field = $config->getImageResourceId() .'_'. $config->getURLFieldId();
     $image_url = $values->$image_url_field;
-    $image_url = str_replace('http://www.hebrideanconnections.com/', 'http://www.dotrural.ac.uk/curiosdemo/', $image_url);
+ //   $image_url = str_replace('http://www.hebrideanconnections.com/', 'http://www.dotrural.ac.uk/curiosdemo/', $image_url);
     $moreinfo_link = '';
     if (isset($this->options['view_path']) && isset($this->options['view_path']))
     	$moreinfo_link =  ' <a href=\''.$GLOBALS['base_path'] .$this->options['view_path'].'/'.$values->{$this->options['id_field']}.'\'>('.t('more info').')</a>';
