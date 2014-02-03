@@ -8,7 +8,7 @@ case study for the [CURIOS project](http://www.dotrural.ac.uk/curios).
 
 ### Requirements:
   * Drupal 7.23+
-  * Apache, MySQL, PHP 5.3+
+  * Apache, MySQL, PHP 5.4+
   * wget, git, [drush](http://drush.ws/)
   * [msysgit](http://msysgit.github.io/) (for Microsoft Windows installation)
   * Jena Fuseki 1.0.0+ - http://jena.apache.org/documentation/serving_data/
