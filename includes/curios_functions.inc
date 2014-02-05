@@ -30,7 +30,7 @@ function curios_is_visible($subject_id){
   if ($isVisible == NULL) {
     $isVisible = _curios_fetch_subject_visibility($subject_id);
     // set cache expiration time 5 mins
-    phpFastCache::set($key, $isVisible, 300);
+    //phpFastCache::set($key, $isVisible, 300);
   }
   return $isVisible;
 }

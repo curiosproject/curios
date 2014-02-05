@@ -234,13 +234,18 @@ $handler->conf = array(
         'context' => 'argument_string_1',
         'not' => FALSE,
       ),
-// add access rule: user can view this record either if it is visible or the user is granted a permission to view them (curios view pending records)
-      2 => array(
+   2 => array(
         'name' => 'php',
         'settings' => array(
           'description' => 'Record visibility',
-          'php' => '
-return (user_access(\'curios view pending records\') || curios_is_visible($contexts["argument_string_1"]->data));',
+          'php' => 'if  (user_access(\'curios view pending records\') || curios_is_visible($contexts["argument_string_1"]->data))
+   return TRUE;
+   else
+   { 
+    drupal_set_message("You do not have enough permission to view record ID:".$contexts["argument_string_1"]->data, \'error\');
+    return FALSE;
+   }
+',
         ),
         'not' => FALSE,
       ),

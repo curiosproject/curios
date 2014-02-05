@@ -836,9 +836,9 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
 
 
   /* Field: Published */
- $handler->display->display_options['fields'][$published_field]['id'] = $base_fields['published'];
+ $handler->display->display_options['fields'][$published_field]['id'] = $published_field;
  $handler->display->display_options['fields'][$published_field]['table'] = $view->base_table;
- $handler->display->display_options['fields'][$published_field]['field'] = $base_fields['published'];
+ $handler->display->display_options['fields'][$published_field]['field'] = $published_field;
  $handler->display->display_options['fields'][$published_field]['alter']['url_encode'] = 0;
  $handler->display->display_options['fields'][$published_field]['required'] = 0;
  $handler->display->display_options['fields'][$published_field]['exists'] = 0;

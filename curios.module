@@ -94,6 +94,12 @@ function curios_permission() {
       'description' => t('Can edit, delete, validate all records. Only give this permission to data administrators ONLY.'),
       'restrict access' => TRUE,
     ),
+    'curios set user groupcode' => array(
+      'title' => t('Set/update user\'s groupcode'),
+      'description' => t('Can change/update user\'s groupcode. Recommended for Administrator only.'),
+      'restrict access' => TRUE,
+    ),
+
  
   );
 }
@@ -369,6 +375,14 @@ function curios_cron(){
 
    _curios_trigger_inference();
  
+}
+
+function curios_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id=='user_profile_form')
+  {	$groupcode = curios_get_user_groupcode();
+	if (!(user_access('curios set user groupcode')||empty($groupcode)))
+      		$form['field_curios_group_code']['#disabled'] = TRUE;
+  }
 }
 
 
