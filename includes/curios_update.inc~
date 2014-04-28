@@ -409,7 +409,7 @@ function __is_published_field($field_instance) {
 }
 
 function __is_special_field($field_instance, $config) { 
-  return //$field_instance['field_name'] == $config->getImageRelationshipFieldId() || // FIXME Image relationship should be treated as normal relationships. 
+  return $field_instance['field_name'] == $config->getImageRelationshipFieldId() || // FIXME Image relationship should be treated as normal relationships. 
          $field_instance['field_name'] == $config->getOwnerFieldId() ||
          $field_instance['field_name'] == $config->getMaintainerFieldId() ||
          $field_instance['field_name'] == $config->getPublishedFieldId()||

@@ -28,7 +28,6 @@ require_once('curios_ldcms.inc');
  * Admin settings form found at admin/structure/ldcms.
  */
 function curios_admin() {
-  $config = curios_configuration();
   $form = array();
 
   $config_files = _curios_config_file_list();
@@ -124,53 +123,18 @@ function curios_admin() {
 
 	  $form['map_settings']['save_setings'] = array(
     	    '#type' => 'submit',
-	    '#value' => 'Save map settings',
+	    '#value' => 'Save Settings',
 	    '#submit' => array('curios_admin_map_settings_submit'),
 	  );
-// comment settings
- $form['comment_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Comment Settings for LDCMS'),
-    '#weight' => 3,
-    '#collapsible' => TRUE,
-  );
-$form['comment_settings']['disqus_code'] = array (
-	  '#type' => 'textfield', 
-	  '#title' => t('DISQUS Comment shortname'), 
-	  '#size' => 60, 
-	  '#default_value' => variable_get('curios_disqus_code',$config->getDisqusCode()),
-	  '#maxlength' => 128, 
-	  '#required' => FALSE,
-	  '#description' => t('(Optional) you need to get the shortname of your Disqus forum at http://disqus.com/admin/create. The default shortname should be given in your config file.'),
-	 );
- $form['comment_settings']['save_settings'] = array(
-    '#value' => 'Save comment settings',
-    '#type' => 'submit', 
-    '#submit' => array('curios_admin_comment_settings_submit'),
-     );
+
 
  $form['ldcms_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('General Settings for LDCMS'),
-    '#weight' => 4,
+    '#weight' => 3,
     '#collapsible' => TRUE,
   );
- $form['ldcms_settings']['record_creator'] = array (
-	  '#type' => 'textfield', 
-	  '#title' => t('Default record maintainer/creator'), 
-	  '#size' => 60, 
-	  '#default_value' => variable_get('curios_default_creator','any'),
-	  '#maxlength' => 128, 
-	  '#required' => TRUE,
-	  '#description' => t('The default creator/maintainer of the record if the creator has no society code/name yet. If none is provided, \'any\' will be used.'),
-	 );
- $form['ldcms_settings']['save_settings'] = array(
-    '#value' => 'Save LDCMS settings',
-    '#type' => 'submit', 
-    '#submit' => array('curios_admin_ldcms_settings_submit'),
-     );
-
-
+ 
      $form['ldcms_settings']['compute-inference'] = array(
     '#value' => 'Re-compute inferences',
     '#type' => 'submit', 
@@ -185,7 +149,7 @@ function curios_admin_compute_inference_submit($form, &$form_state) {
   if (_curios_trigger_inference())
 	  drupal_set_message(t('The inference graph has been recomputed!'));
   else
-	  drupal_set_message(t('The inference graph is up-to-dated and no recomputation required, or something was wrong with the inference engine.'));
+	  drupal_set_message(t('The inference graph is up-to-dated. No recomputation required.'));
 }
 
 
@@ -205,18 +169,6 @@ function curios_admin_map_settings_submit($form, &$form_state) {
 	  variable_set('curios_default_zoom_level',$form_state['values']['default_zoom_level']);
 
   drupal_set_message(t('LDCMS Map settings have been saved.'));
-}
-
-function curios_admin_comment_settings_submit($form, &$form_state) {
-  if ($form_state['values']['disqus_code']!=variable_get('curios_disqus_code'))
-	  variable_set('curios_disqus_code',$form_state['values']['disqus_code']);
-  drupal_set_message(t('DISQUS comment settings have been saved.'));
-}
-
-function curios_admin_ldcms_settings_submit($form, &$form_state) {
-  if ($form_state['values']['record_creator']!=variable_get('curios_default_creator'))
-	  variable_set('curios_default_creator',$form_state['values']['record_creator']);
-  drupal_set_message(t('LDCMS settings have been saved.'));
 }
 
 

@@ -170,9 +170,6 @@ class LDCMSConfiguration {
   function setMapSettings($map_settings) { $this->map_settings = $map_settings; }
   function getMapSettings() { return $this->map_settings; }
 
-  function setDisqusCode($disqus_code) {$this->disqus_code = $disqus_code; }
-  function getDisqusCode() {return $this->disqus_code; }
-
   function toString_dump() {
     var_dump($this->resourceToViewMap);
     print '<hr/>';

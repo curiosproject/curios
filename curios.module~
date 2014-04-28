@@ -81,7 +81,7 @@ function curios_permission() {
     ),
     'curios edit own records' => array(
       'title' => t('Edit Records'),
-      'description' => t('Can edit cannot change record publication status or the maintainer of the record (initially the society of the creator) . Records after editting will be marked as \'pending\''),
+      'description' => t('Can edit cannot change record publication status or the maintainer of the record (initially the admin) . Records after editting will be marked as \'pending\''),
       'restrict access' => TRUE,
     ),
     'curios validate own records' => array(

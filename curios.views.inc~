@@ -69,7 +69,7 @@ function curios_views_pre_render(&$view) {
 function _curios_views_rewrite_title(&$view) {
   if (startsWith('ldcms_', $view->name)) {
     // Remove h1 title.
-    //drupal_add_css('#page-title { display: none; }', array('type' => 'inline'));
+    drupal_add_css('#page-title { display: none; }', array('type' => 'inline'));
 
     // Set page title.
     switch ($view->current_display) {

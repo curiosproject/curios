@@ -44,7 +44,10 @@ function __curios_sparql_query($query, $endpoint = 'dataset') {
   $endpoints = curios_endpoints();
   $query = __curios_sparql_append_prefixes($query);
   $rs = sparql_request($query, (object)array('uri' => $endpoints[$endpoint]['query']));
-
+echo '---------------------------------------------------------\n';
+ echo $query;
+ var_dump($rs);
+echo '---------------------------------------------------------\n';
   if ($rs != NULL) {
     return $rs;
   } else {

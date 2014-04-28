@@ -1,0 +1,181 @@
+<?php
+/*
+ * curios.install
+ * 
+ * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * University of Aberdeen. All rights reserved.
+ *
+ * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once('includes/curios_functions.inc');
+require_once('includes/curios_sparql.inc');
+
+/**
+ * Implements hook_schema.
+ *
+ * Database table to cache configuration files.
+ */
+function curios_schema() {
+  $schema = array();
+  
+  $schema['curios_config'] = array(
+    'description' => 'The current loaded LDCMS configuration',
+    'fields' => array(
+      'file' => array(
+        'description' => 'Configuration file name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'data' => array(
+        'description' => 'The serialised config spec.',
+        'type' => 'text',
+        'serialize' => TRUE,
+      ),
+    ),
+    'primary key' => array('file'),
+  );
+  
+  return $schema;
+}
+
+/**
+ * Implements hook_install.
+ *
+ * Registers endpoint, creates menu for record types, sets default configuration file.
+ */
+function curios_install() {
+// create a taxonomy for groupcodes
+$term =  taxonomy_vocabulary_machine_name_load('tax_groupcodes');
+if (!$term)
+{
+  $term = new stdClass();
+  $term->name = 'Society';
+  $term->machine_name = 'tax_groupcodes';
+  $term->description = t('This taxonomy stores group codes of the historical societies.');
+  $term->heirarchy = 1;
+  $term->module = 'curios';
+  $term->weight = 1;
+  taxonomy_vocabulary_save($term);
+}
+
+// Check if group_code field is not already created for users.
+if (!field_info_field('field_curios_group_code')) {
+    $field = array(
+        'field_name' => 'field_curios_group_code', 
+        'type' => 'taxonomy_term_reference', 
+        'settings' => array(
+         'allowed_values' => array(
+		array(
+		  'vocabulary' => 'tax_groupcodes',
+		  'parent' => 0
+		),
+     	  ),
+    	),
+        
+    );
+    field_create_field($field);
+
+    // Create the instance on the bundle.
+    $instance = array(
+        'field_name' => 'field_curios_group_code', 
+        'entity_type' => 'user', 
+        'label' => 'Society Code', 
+        'bundle' => 'user', 
+        'widget' => array(
+            'type' => 'taxonomy_autocomplete',
+            'weight' => '1',
+        ), 
+    );
+    field_create_instance($instance);
+  }
+
+  // Create record types menu.
+  $menu = array(
+    'menu_name' => 'menu-curios',
+    'title' => 'Record Types',
+    'description' => 'CURIOS menu',
+  );
+  menu_save($menu);
+  __curios_activate_block('menu', 'menu-curios', 'sidebar_first', 'bartik', '', '0');
+
+ // Create pending records menu.
+  $menu = array(
+    'menu_name' => 'menu-pending',
+    'title' => 'Pending Records',
+    'description' => 'Pending records for administrative tasks (validation/editing)',
+  );
+  menu_save($menu);
+  __curios_activate_block('menu', 'menu-pending', 'sidebar_first', 'bartik', '', '0');
+
+
+  // Register end point.
+  $config_endpoints = curios_endpoints();
+  $endpoints = array();
+  $endpoints['curios_query_endpoint'] = (object)array(
+    'title' => 'CURIOS: query endpoint',
+    'uri' => $config_endpoints['dataset']['query'],
+  );
+   $endpoints['curios_query_update_endpoint'] = (object)array(
+    'title' => 'Query endpoint for no-inference service ( used for update form)',
+    'uri' => $config_endpoints['noinference']['query'],
+  );
+  sparql_views_register_endpoints($endpoints);
+  
+
+
+  // Default to Hebridean Connections configuration.
+  variable_set('ldcms_config', 'hebridean.ldcms.inc');
+  variable_del('ldcms_installed');
+
+   // Clear caches.
+  cache_clear_all(NULL, 'cache_views', TRUE);
+  menu_rebuild();
+  cache_clear_all(NULL, 'cache_block');
+}
+
+/**
+ * Implements hook_uninstall.
+ */
+function curios_uninstall() {
+// clean up taxonomy
+ $groupcode_vocabulary = taxonomy_vocabulary_machine_name_load('tax_groupcodes');
+ taxonomy_vocabulary_delete($groupcode_vocabulary->vid);
+
+//delete menus
+$menu1 = array(
+    'menu_name' => 'menu-curios',
+    'title' => 'Record Types',
+    'description' => 'CURIOS menu',
+  );
+$menu2 = array(
+    'menu_name' => 'menu-pending',
+    'title' => 'Pending Records',
+    'description' => 'Pending records for administrative tasks (validation/editing)',
+  );
+menu_delete ($menu1);
+menu_delete ($menu2);
+
+   // Clear caches.
+  cache_clear_all(NULL, 'cache_views', TRUE);
+  menu_rebuild();
+  cache_clear_all(NULL, 'cache_block');
+
+  // TODO clean up.
+
+  variable_del('ldcms_installed');
+
+}
+

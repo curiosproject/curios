@@ -116,7 +116,6 @@ function __curios_configuration_options($config, $config_spec) {
 
   // Comment Settings -- DISQUS
   $disqus_code = $config_spec['options']['default_disqus_code'];
-  $config->setDisqusCode($disqus_code);
 }
 
 /**
