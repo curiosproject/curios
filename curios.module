@@ -296,7 +296,7 @@ function curios_search_engine_form($form, $form_state) {
   }
   natcasesort($options);
 
-  $form['query'] = array('#type' => 'textfield', '#title' => t('Search Hebridean Connections'));
+  $form['query'] = array('#type' => 'textfield', '#title' => t('Type keywords'));
   $form['type'] = array(
     '#type' => 'select',
     '#title' => t('Record Type'),
