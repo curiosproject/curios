@@ -65,7 +65,7 @@ class curios_image_thumbnail_field extends views_handler_field {
     $image_url = $values->$image_url_field;
     global $base_url;
     $image_url = str_replace('http://www.hebrideanconnections.com/', $base_url.'/', str_replace(' ','%20',$image_url));
-  
+
     $moreinfo_link = '';
     if (isset($this->options['view_path']) && isset($this->options['view_path']))
     	$moreinfo_link =  ' <a href=\''.$GLOBALS['base_path'] .$this->options['view_path'].'/'.$values->{$this->options['id_field']}.'\'>('.t('more info').')</a>';
@@ -81,6 +81,28 @@ class curios_image_thumbnail_field extends views_handler_field {
     return $image_output;
   }
 }
+
+class curios_sound_handler_field extends views_handler_field {
+
+  function query() {
+    $this->field_alias = 'curios_sound_file';
+  }
+
+  function render($values) {
+
+    $config = curios_configuration();
+    $sound_url_field = 'hc_sound_file_'. $config->getURLFieldId();
+    $sound_url = $values->$sound_url_field;
+    global $base_url;
+    $sound_url = str_replace('http://www.hebrideanconnections.com/', $base_url.'/', str_replace(' ','%20',$sound_url));
+
+    $title = $values->{$this->options['title_field']} ;
+    
+    $sound_output = "<audio id='audio_player_single' src='$sound_url' title='$title' > </audio>";
+    return $sound_output;
+  }
+}
+
 
 class curios_date_range_field extends views_handler_field {
 

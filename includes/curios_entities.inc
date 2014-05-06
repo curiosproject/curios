@@ -323,7 +323,7 @@ class RDFViewSpec extends DrupalThing {
   public function getObjectFields() { return $this->getRelationshipIds(); }
 
   public function getPageDescription() {
-    return 'From this page you can browse and search the Hebridean Connections repository.';
+    return 'From this page you can browse and search the Linked Data repository.';
   }
 
 }

@@ -1,7 +1,7 @@
 /*
  * curios-date-handler.js
  *
- * Copyright (c) 2011-2013, University of Aberdeen. All rights reserved.
+ * Copyright (c) 2011-2014, University of Aberdeen, Hai Nguyen (hai.nguyen@abdn.ac.uk). All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License as

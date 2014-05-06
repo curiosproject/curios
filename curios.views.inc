@@ -2,7 +2,7 @@
 /*
  * curios.views.inc
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2014,  Hai Nguyen (hai.nguyen@abdn.ac.uk) & Stuart Taylor (staylor@abdn.ac.uk),
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -42,6 +42,16 @@ function curios_views_data() {
       'handler' => 'curios_image_thumbnail_field',
     ),
   );
+  $data['views']['curios_sound_handler_field'] = array(
+    'title' => t('Sound player field'),
+    'help' => t('Plays a sound file (URL).'),
+    'field' => array(
+      'help' => t('CURIOS sound handler field.'),
+      'handler' => 'curios_sound_handler_field',
+    ),
+  );
+
+
   $data['views']['curios_date_range_field'] = array(
     'title' => t('Date Range field'),
     'help' => t('Renders date range objects as a single field..'),
@@ -69,7 +79,7 @@ function curios_views_pre_render(&$view) {
 function _curios_views_rewrite_title(&$view) {
   if (startsWith('ldcms_', $view->name)) {
     // Remove h1 title.
-    //drupal_add_css('#page-title { display: none; }', array('type' => 'inline'));
+    drupal_add_css('#page-title { display: none; }', array('type' => 'inline'));
 
     // Set page title.
     switch ($view->current_display) {

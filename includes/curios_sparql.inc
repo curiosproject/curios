@@ -29,8 +29,8 @@ function curios_endpoints() {
       'update' => 'http://localhost:3030/dataset/update',
     ),
     'noinference' => array(
-      'query' => 'http://localhost:3030/ds/query',
-      'update' => 'http://localhost:3030/ds/update',
+      'query' => 'http://localhost:3030/dataset/query',
+      'update' => 'http://localhost:3030/dataset/update',
     ),
   );
 

@@ -2,7 +2,7 @@
 /*
  * curios.views_custom.inc
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2013,  Hai Nguyen (hai.nguyen@abdn.ac.uk), Stuart Taylor (staylor@abdn.ac.uk),
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -280,6 +280,18 @@ function __curios_generate_display_properties_hc_sound_file(&$view, &$view_spec,
 
   __curios_field_newline($handler);
   $handler->display->display_options['fields'][$url_field_name] = $url_field;
+
+
+  $handler->display->display_options['fields']['curios_sound_handler_field']['id'] = 'curios_sound_handler_field';
+  $handler->display->display_options['fields']['curios_sound_handler_field']['table'] = 'views';
+  $handler->display->display_options['fields']['curios_sound_handler_field']['field'] = 'curios_sound_handler_field';
+  $handler->display->display_options['fields']['curios_sound_handler_field']['label'] = '';
+  $handler->display->display_options['fields']['curios_sound_handler_field']['alter']['text'] = "[$url_field_name]";
+  $handler->display->display_options['fields']['curios_sound_handler_field']['alter']['make_link'] = FALSE;
+  $handler->display->display_options['fields']['curios_sound_handler_field']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['curios_sound_handler_field']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['curios_sound_handler_field']['title_field'] = $base_fields['title'];
+
 
   return $handler;
 }

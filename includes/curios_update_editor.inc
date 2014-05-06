@@ -216,7 +216,6 @@ function curios_update_form($form, $form_state, $resource_type, $subject_id, $vi
   _curios_update_fieldset_record_meta($form, $config, $rdf_mapping, $resource_type, $subject_id);
   _curios_update_fieldset_delete($form, $config, $rdf_mapping);
 
-
   // Submit button.
   $form['submit_update'] = array(
     '#type' => 'submit',
@@ -413,15 +412,17 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
     $map_settings = $config->getMapSettings();
 
     if ($instance['field_name']===$map_settings['map_x_prop'])
-      {  drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key='.variable_get('curios_osmap_api_key'));
+	{  
 	 drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-geo-handler.js');
-         drupal_add_js(array('curiosMap' => array('mapXName' => $map_settings['map_x_prop'], 
+        /* 
+	drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key='.variable_get('curios_osmap_api_key'));
+	drupal_add_js(array('curiosMap' => array('mapXName' => $map_settings['map_x_prop'], 
 						  'mapYName' => $map_settings['map_y_prop'],
 						  'defaultE' => variable_get('curios_default_easting'),
 						  'defaultN' => variable_get('curios_default_northing'),
    						  'defaultZoom' => variable_get('curios_default_zoom_level')
 						  	)), 'setting');
-
+*/
 	 $form['optional_fields'][$map_settings['map_position']]['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="map"></div>';
       }
   }
@@ -504,14 +505,13 @@ function _curios_update_fieldset_existing_relationships(&$form, $form_state, $rd
     '#disabled' => (curios_is_valid_editor($subject_id)?FALSE:TRUE) ,
   );
 
+
   if (empty($form_state['storage']['relationship_listing_group_remove'])) {
     $form_state['storage']['relationship_listing_group_remove'] = array();
   }
-
   $group_count = 0;
   foreach ($relationship_options as $relationship_id=>$relationship_label) {
     $view_results = _curios_execute_relationship_view($resource_type->name, $relationship_id, $subject_id);
-
     if (!empty($view_results)) {
       $form['relationship_listing_fieldset'][] = array('#markup' => "<h3>$relationship_label:</h3>");
     }

@@ -55,6 +55,22 @@ function curios_init() {
   if (!isset($_GET['field_event_category_value'])) {
     $_GET['field_event_category_value'] = 'All';
   }
+// add javascripts for map
+  $osapikey = variable_get('curios_osmap_api_key');
+  if (!empty(	$osapikey ))
+    {   drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key='.$osapikey); 
+
+	$config = curios_configuration();
+	$map_settings = $config->getMapSettings();	
+    	drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-map-view-handler.js');
+    	drupal_add_js(array('curiosMap' => array( 'mapXName' => $map_settings['map_x_prop'], 
+						  'mapYName' => $map_settings['map_y_prop'],
+						  'defaultE' => variable_get('curios_default_easting'),
+						  'defaultN' => variable_get('curios_default_northing'),
+   						  'defaultZoom' => variable_get('curios_default_zoom_level')
+						  	)), 'setting');
+		
+    }
 }
 
 /**
@@ -257,7 +273,7 @@ function curios_filter_info() {
   $filters = array();
   $filters[] = array(
     'title' => t('Description Link Filter'),
-    'description' => t('This filter renders the subject links that appear in the description fields of Hebridean Connections subjects.'),
+    'description' => t('This filter renders the subject links that appear in the description fields of CURIOS subjects.'),
     'process callback' => 'curios_filter_description_links',
   );
   return $filters;

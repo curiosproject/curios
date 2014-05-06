@@ -2,7 +2,7 @@
 /*
  * curios.views_default.inc
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2014,  Hai Nguyen (hai.nguyen@abdn.ac.uk) & Stuart Taylor (staylor@abdn.ac.uk),
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -132,8 +132,8 @@ function __curios_generate_default_view_for_update(&$view_spec) {
 
   // Relationship blocks.
   foreach ($view_spec->getObjectFields() as $field_id) {
-    if ($field_id == $config->getImageRelationshipFieldId())
-      continue;
+  //  if ($field_id == $config->getImageRelationshipFieldId())
+  //    continue;
 
     __curios_generate_object_block($view, $view_spec, $base_fields, $field_id);
   }
@@ -622,6 +622,7 @@ function __curios_generate_object_block(&$view, &$view_spec, $base_fields, $fiel
   $title_field_name = $ranges[$field_id].'_'.$config->getTitleFieldId();
   $identifier_field_name = $ranges[$field_id].'_'.$config->getIdentifierFieldId();
   $type_field_name = $ranges[$field_id].'_type';
+  $description_field_name = $ranges[$field_id].'_'.$config->getDescriptionFieldId();
   $target_view_id = $config->getViewIdForResource($ranges[$field_id]);
   $target_view = $config->getViewSpec($target_view_id);
 
@@ -634,6 +635,19 @@ function __curios_generate_object_block(&$view, &$view_spec, $base_fields, $fiel
   $handler->display->display_options['fields'][$identifier_field_name]['exclude'] = TRUE;
   $handler->display->display_options['fields'][$identifier_field_name]['required'] = 1;
 
+  $handler->display->display_options['fields'][$description_field_name]['id'] = $description_field_name;
+  $handler->display->display_options['fields'][$description_field_name]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$description_field_name]['field'] = $description_field_name;
+  $handler->display->display_options['fields'][$description_field_name]['relationship'] = $field_name;
+  $handler->display->display_options['fields'][$description_field_name]['label'] = '';
+  $handler->display->display_options['fields'][$description_field_name]['exclude'] = TRUE;
+  $handler->display->display_options['fields'][$description_field_name]['type'] = 'text_trimmed';
+  $handler->display->display_options['fields'][$description_field_name]['required'] = 0;
+  $handler->display->display_options['fields'][$description_field_name]['exists'] = 0;
+  $handler->display->display_options['fields'][$description_field_name]['settings'] = array(
+   'trim_length' => '150',
+  );
+ 
   if (!$use_rewrite) {
     // Display the title field directly (no rewriting).
     $handler->display->display_options['fields'][$title_field_name]['id'] =  $title_field_name;
@@ -669,6 +683,7 @@ function __curios_generate_object_block(&$view, &$view_spec, $base_fields, $fiel
     /* Field: Global: Link Target Rewriter */
     $title_field_id = $config->getDefaultResourceId().'_'.$config->getTitleFieldId();
     $identifier_field_id = $config->getDefaultResourceId().'_'.$config->getIdentifierFieldId();
+    $description_field_id = $config->getDefaultResourceId().'_'.$config->getDescriptionFieldId();
     $default_view_spec = $config->getViewSpec($config->getViewIdForResource($config->getDefaultResourceId()));
     $default_view_path = $default_view_spec->getPath();
     
@@ -680,13 +695,14 @@ function __curios_generate_object_block(&$view, &$view_spec, $base_fields, $fiel
     $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['text'] = "[$title_field_id]";
     $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['make_link'] = TRUE;
     $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['path'] = "$default_view_path/[$identifier_field_id]";
+    $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['alt'] = "[$description_field_id]";
     $handler->display->display_options['fields']['curios_link_target_rewriter']['element_label_colon'] = FALSE;
     $handler->display->display_options['fields']['curios_link_target_rewriter']['hide_alter_empty'] = FALSE;
-    $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['max_length'] = '18';
-    $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['word_boundary'] = FALSE;
+    $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['max_length'] = '35';
+    $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['word_boundary'] = TRUE;
     $handler->display->display_options['fields']['curios_link_target_rewriter']['alter']['trim'] = TRUE;
-      }
-
+      
+ }
   // Contextual filters.
   __curios_uri_filter($handler, $view, $view_spec);
   __curios_rdf_type_filter($handler, $view, $view_spec);
@@ -814,6 +830,7 @@ function __curios_generate_display_listing_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields'][$base_fields['title']]['alter']['alter_text'] = 0;
   $handler->display->display_options['fields'][$base_fields['title']]['alter']['make_link'] = 1;
   $handler->display->display_options['fields'][$base_fields['title']]['alter']['path'] = $view_spec->getPath().'/['.$subject_id_field.']';
+  $handler->display->display_options['fields'][$base_fields['title']]['alter']['target'] = '_blank';
   $handler->display->display_options['fields'][$base_fields['title']]['element_label_colon'] = 1;
   $handler->display->display_options['fields'][$base_fields['title']]['element_default_classes'] = 1;
   $handler->display->display_options['fields'][$base_fields['title']]['required'] = 1;
@@ -1389,6 +1406,7 @@ $subject_id_field  => array(
   $handler->display->display_options['fields'][$base_fields['title']]['alter']['alter_text'] = 0;
   $handler->display->display_options['fields'][$base_fields['title']]['alter']['make_link'] = 1;
   $handler->display->display_options['fields'][$base_fields['title']]['alter']['path'] = $view_spec->getPath().'/['.$subject_id_field.']';
+  $handler->display->display_options['fields'][$base_fields['title']]['alter']['target'] = '_blank';
   $handler->display->display_options['fields'][$base_fields['title']]['element_label_colon'] = 1;
   $handler->display->display_options['fields'][$base_fields['title']]['element_default_classes'] = 1;
   $handler->display->display_options['fields'][$base_fields['title']]['required'] = 1;
@@ -1474,6 +1492,11 @@ $handler->display->display_options['filters'][$base_fields['published']]['group_
     'title' => 'No',
     'operator' => '~=',
     'value' => 'no',
+  ),
+4 => array(
+    'title' => 'Reviewed',
+    'operator' => '~=',
+    'value' => 'reviewed',
   ),
 );
 $handler->display->display_options['filters'][$base_fields['published']]['sparql_options'] = array(

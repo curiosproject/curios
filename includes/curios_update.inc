@@ -2,7 +2,7 @@
 /*
  * curios_update.inc
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2013,  Hai Nguyen (hai.nguyen@abdn.ac.uk), Stuart Taylor (staylor@abdn.ac.uk),
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -53,7 +53,7 @@ EOT;
  */
 function curios_admin_tools_page() {
   $page = array();
-  $page[] = array('#markup' => '<p>This page contains a selection of admin tools for the Hebridean Connections repository.</p>');
+  $page[] = array('#markup' => '<p>This page contains a selection of admin tools for the Linked Data repository.</p>');
   $page[] = curios_latest_records();
 
   return $page;
