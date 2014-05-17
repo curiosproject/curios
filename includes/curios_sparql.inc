@@ -145,9 +145,10 @@ function _curios_subject_delete($subject_id) {
   $record = "$prefix:$subject_id";
 
   $query = '';
-  $query .= "DELETE { ?subject ?p ?o }\n";
+  $query .= "DELETE ";
   $query .= "WHERE {\n";
   $query .= "  ?subject ?p ?o .\n";
+  $query .= "  ?s ?p1 ?subject .\n";
   $query .= "  FILTER ( ?subject = $record ) }";
 
   return __curios_sparql_update($query);

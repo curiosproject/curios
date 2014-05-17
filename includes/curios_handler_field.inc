@@ -2,7 +2,7 @@
 /*
  * curios_handler_field.inc
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2013, Hai Nguyen  (hai.nguyen@abdn.ac.uk) Stuart Taylor (staylor@abdn.ac.uk),
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -70,7 +70,7 @@ class curios_image_thumbnail_field extends views_handler_field {
     if (isset($this->options['view_path']) && isset($this->options['view_path']))
     	$moreinfo_link =  ' <a href=\''.$GLOBALS['base_path'] .$this->options['view_path'].'/'.$values->{$this->options['id_field']}.'\'>('.t('more info').')</a>';
     $title = $values->{$this->options['title_field']} .$moreinfo_link ;
-    
+    $title = str_replace('"', '\'', $title);
     if (isset($this->options['disable_thumbnail']) && $this->options['disable_thumbnail'] = TRUE) { // Display full size image.
       $image_output = "<a href=\"$image_url\" title=\"$title\" rel=\"lightbox[gallery]\"><img src=\"$image_url\" alt=\"$title\" /></a>";
     } else { // Generate thumbnail.
@@ -96,7 +96,7 @@ class curios_sound_handler_field extends views_handler_field {
     global $base_url;
     $sound_url = str_replace('http://www.hebrideanconnections.com/', $base_url.'/', str_replace(' ','%20',$sound_url));
 
-    $title = $values->{$this->options['title_field']} ;
+    $title = addslashes($values->{$this->options['title_field']}) ;
     
     $sound_output = "<audio id='audio_player_single' src='$sound_url' title='$title' > </audio>";
     return $sound_output;

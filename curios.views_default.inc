@@ -397,7 +397,7 @@ function __curios_generate_display_properties_default(&$view, &$view_spec, $base
   $handler->display->display_options['query']['type'] = 'views_query';
   
   // Combine multi-valued fields.
-  $handler->display->display_options['query']['options']['consolidate'] = FALSE;
+  $handler->display->display_options['query']['options']['consolidate'] = TRUE;
 
   // Overrides.
   $handler->display->display_options['defaults']['title'] = FALSE;
@@ -415,11 +415,8 @@ function __curios_generate_display_properties_default(&$view, &$view_spec, $base
   $handler->display->display_options['defaults']['access'] = FALSE;
 
   // Pager options.
-  //$handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '1';
+  $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-
   // Field options.
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
@@ -679,7 +676,7 @@ function __curios_generate_object_block(&$view, &$view_spec, $base_fields, $fiel
     $handler->display->display_options['fields'][$description_field_name]['required'] = 0;
     $handler->display->display_options['fields'][$description_field_name]['exists'] = 0;
     $handler->display->display_options['fields'][$description_field_name]['settings'] = array(
-   'trim_length' => '150',
+   'trim_length' => '300',
   );
 
     /* Field: Global: Link Target Rewriter */

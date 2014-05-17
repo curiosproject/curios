@@ -207,6 +207,7 @@
                       End-date: " + result[1]);
                     startDateInput.val(result[0]);
                     endDateInput.val(result[1]);
+		   $(this).attr('disabled', true);
                 }
             });
         }

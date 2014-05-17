@@ -53,8 +53,7 @@ function curios_update_form_page($resource_type, $subject_id = NULL) {
    {
 
    $maintainers = implode(';',curios_get_maintainers($subject_id));
- 	
-	drupal_set_message("Cannot edit a record maintained by another society:  Subject $subject_id is maintained by \"$maintainers\". If you are a member of \"$maintainers\", please make sure that you have a permission to edit a record.", 'warning', FALSE);
+   drupal_set_message("Cannot edit or validate a record maintained by another society:  Subject $subject_id is maintained by \"$maintainers\". If you are a member of \"$maintainers\", please make sure that you have a permission to edit or validate a record.", 'warning', FALSE);
 	return curios_update_page();
    }
 

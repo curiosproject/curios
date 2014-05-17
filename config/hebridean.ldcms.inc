@@ -37,7 +37,7 @@ $options = array(
   'description_property' => 'hc:description',
     
   // Record metadata properties.
-  'owner_property' => 'hc:ownedBySociety',
+  'owner_property' => //'hc:ownedBySociety',
   'maintainer_property' => 'hc:maintainedBySociety',
   'published_property' => 'hc:approvedForPub',
   'editor_notes_property' => 'hc:editorNotes',
@@ -304,7 +304,7 @@ $fields[] = array(
    'type'     => 'integer',
 );
 $fields[] = array(
-   'property' => 'hc:ownedBySociety',
+   'property' => //'hc:ownedBySociety',
    'label'    => 'Record Owned By',
    'type'     => 'autocomplete',
 );
@@ -653,12 +653,12 @@ $fields[] = array(
 );
 $fields[] = array(
    'property' => 'hc:isShownHere',
-   'label'    => 'Is Shown Here',
+   'label'    => 'Associated With',
    'type'     => 'relationship',
 );
 $fields[] = array(
    'property' => 'hc:isHeardHere',
-   'label'    => 'Is Heard Here',
+   'label'    => 'Associated With',
    'type'     => 'relationship',
 );
 $fields[] = array(
@@ -807,7 +807,7 @@ $field_assignments['subjects'] = array(
    'hc:title',
    'hc:gaelicName',
    'hc:alsoKnownAs',
-   'hc:typeOfBoat',
+/*   'hc:typeOfBoat',
    'hc:typeOfBuildingPublicAmenity',
    'hc:typeOfBusiness',
    'hc:typeOfResidence',
@@ -819,10 +819,11 @@ $field_assignments['subjects'] = array(
    'hc:typeOfOrganisation',
    'hc:typeOfStoryReportTradition',
    'hc:typeOfVehicle',
+*/
    'hc:dateLaunched',
    'hc:dateOfRegistration',
    'hc:registration',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:dateBuilt',
    'hc:dateEstablished',
    'hc:dateFounded',
@@ -861,11 +862,11 @@ $field_assignments['boats'] = array(
    'hc:title',
    'hc:gaelicName',
    'hc:alsoKnownAs',
-   'hc:typeOfBoat',
+//    'hc:typeOfBoat',
    'hc:dateLaunched',
    'hc:dateOfRegistration',
    'hc:registration',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:approvedForPub',
    'hc:description',
    'hc:maintainedBySociety',
@@ -875,8 +876,8 @@ $field_assignments['boats'] = array(
 $field_assignments['buildings_and_public_amenities'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfBuildingPublicAmenity',
-'hc:ownedBySociety',
+//   'hc:typeOfBuildingPublicAmenity',
+//'hc:ownedBySociety',
    'hc:dateBuilt',
    'hc:periodOfConstructionUse',
    'hc:northing',
@@ -890,8 +891,8 @@ $field_assignments['buildings_and_public_amenities'] = array(
 $field_assignments['businesses'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfBusiness',
-'hc:ownedBySociety',
+//    'hc:typeOfBusiness',
+//'hc:ownedBySociety',
    'hc:dateFounded',
    'hc:northing',
    'hc:easting',
@@ -906,7 +907,7 @@ $field_assignments['crofts_and_residences'] = array(
    'hc:title',
    'hc:gaelicName',
    'hc:typeOfResidence',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:dateBuilt',
    'hc:periodOfConstructionUse',
    'hc:northing',
@@ -921,7 +922,7 @@ $field_assignments['crofts_and_residences'] = array(
 $field_assignments['gaelic_verse'] = array(
    'hc:title',
    'hc:gaelicName',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:date',
    'hc:theme',
    'hc:approvedForPub',
@@ -933,8 +934,8 @@ $field_assignments['gaelic_verse'] = array(
 $field_assignments['historical_events'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfEvent',
-'hc:ownedBySociety',
+//    'hc:typeOfEvent',
+//'hc:ownedBySociety',
    'hc:date',
    'hc:timePeriod',
    'hc:approvedForPub',
@@ -946,8 +947,8 @@ $field_assignments['historical_events'] = array(
 $field_assignments['landmarks_and_archaeological_sites'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfSite',
-'hc:ownedBySociety',
+//    'hc:typeOfSite',
+//'hc:ownedBySociety',
    'hc:period',
    'hc:SMRRecordID',
    'hc:northing',
@@ -963,7 +964,7 @@ $field_assignments['locations'] = array(
    'hc:gaelicName',
    'hc:alsoKnownAs',
    'hc:typeOfLocation',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:northing',
    'hc:easting',
    'hc:approvedForPub',
@@ -977,8 +978,8 @@ $field_assignments['natural_landscape_features'] = array(
    'hc:title',
    'hc:gaelicName',
    'hc:alsoKnownAs',
-   'hc:typeOfNaturalLandscapeFeature',
-'hc:ownedBySociety',
+//    'hc:typeOfNaturalLandscapeFeature',
+//'hc:ownedBySociety',
    'hc:northing',
    'hc:easting',
    'hc:approvedForPub',
@@ -990,8 +991,8 @@ $field_assignments['natural_landscape_features'] = array(
 $field_assignments['objects_and_artefacts'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfObjectArtefact',
-'hc:ownedBySociety',
+//    'hc:typeOfObjectArtefact',
+//'hc:ownedBySociety',
    'hc:period',
    'hc:SMRRecordID',
    'hc:approvedForPub',
@@ -1004,8 +1005,8 @@ $field_assignments['objects_and_artefacts'] = array(
 $field_assignments['organisations'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfOrganisation',
-'hc:ownedBySociety',
+//    'hc:typeOfOrganisation',
+//'hc:ownedBySociety',
    'hc:dateEstablished',
    'hc:approvedForPub',
    'hc:description',
@@ -1017,7 +1018,7 @@ $field_assignments['people'] = array(
    'hc:title',
    'hc:gaelicName',
    'hc:alsoKnownAs',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:born',
    'hc:dateOfDeath',
    'hc:dateOfMarriage',
@@ -1033,7 +1034,7 @@ $field_assignments['people'] = array(
 $field_assignments['resources'] = array(
    'hc:title',
    'hc:gaelicName',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:dateOfSource',
    'hc:approvedForPub',
    'hc:description',
@@ -1045,8 +1046,8 @@ $field_assignments['resources'] = array(
 $field_assignments['stories_reports_and_traditions'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfStoryReportTradition',
-'hc:ownedBySociety',
+//    'hc:typeOfStoryReportTradition',
+//'hc:ownedBySociety',
    'hc:date',
    'hc:approvedForPub',
    'hc:description',
@@ -1057,9 +1058,9 @@ $field_assignments['stories_reports_and_traditions'] = array(
 $field_assignments['vehicles'] = array(
    'hc:title',
    'hc:gaelicName',
-   'hc:typeOfVehicle',
+//    'hc:typeOfVehicle',
    'hc:registration',
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:chassis',
    'hc:approvedForPub',
    'hc:description',
@@ -1068,7 +1069,7 @@ $field_assignments['vehicles'] = array(
    'hc:editorNotes',
 );
 $field_assignments['image_details'] = array(
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:approvedForPub',
    'hc:copyright',
    'hc:description',
@@ -1082,7 +1083,7 @@ $field_assignments['image_details'] = array(
    'hc:editorNotes',
 );
 $field_assignments['sound_files'] = array(
-'hc:ownedBySociety',
+//'hc:ownedBySociety',
    'hc:approvedForPub',
    'hc:copyright',
    'hc:description',

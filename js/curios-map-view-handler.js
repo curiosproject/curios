@@ -30,8 +30,6 @@
                 y = y.replace('_', '-');
                 var Y = $("div[class$=" + y + "] span:last-child").html();
                 $("div[class$=curios-summary-row]").after("<div id=osmap></div>");
-                $('#osmap').css("width", "100%");
-                $('#osmap').css("height", "400px");
                 var marker = new OpenSpace.MapPoint(X, Y);
                 var osMap = new OpenSpace.Map("osmap");
                 osMap.setCenter(marker, defaultZoom);
@@ -46,10 +44,9 @@
             $(document).ready(function () {
 
                 // Create new map
-                $(".view-map-view").after("<div id=multimap></div>");
-                $('#multimap').css("width", "100%");
-                $('#multimap').css("height", "600px");
-                var multimap = new OpenSpace.Map('multimap');
+                $(".view-map-view").after("<div id=osmap></div>");
+
+                var multimap = new OpenSpace.Map('osmap');
 
                 var pos;
                 var places = $(".curios-place").map(function () {
