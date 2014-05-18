@@ -357,7 +357,7 @@ function __curios_generate_display_summary_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields'][$base_fields['description']]['type'] = 'text_default';
   $handler->display->display_options['fields'][$base_fields['description']]['required'] = 0;
   $handler->display->display_options['fields'][$base_fields['description']]['exists'] = 0;
-
+/*
   // Field: search link.
   $field_name = 'searchlink';
   $handler->display->display_options['fields'][$field_name]['id'] = $field_name;
@@ -368,7 +368,7 @@ function __curios_generate_display_summary_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields'][$field_name]['alter']['text'] = 'Back to listing';
   $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
   $handler->display->display_options['fields'][$field_name]['alter']['path'] = $view_spec->getPath().'/';
-
+*/
   
   // Contextual filters.
   __curios_uri_filter($handler, $view, $view_spec);
@@ -396,8 +396,8 @@ function __curios_generate_display_properties_default(&$view, &$view_spec, $base
   $handler = $view->new_display('block', 'Properties', 'properties');
   $handler->display->display_options['query']['type'] = 'views_query';
   
-  // Combine multi-valued fields.
-  $handler->display->display_options['query']['options']['consolidate'] = TRUE;
+  // Combine multi-valued fields (only for query , not for update service)
+  $handler->display->display_options['query']['options']['consolidate'] = (strpos($view->name, 'update') !== FALSE)?FALSE:TRUE;
 
   // Overrides.
   $handler->display->display_options['defaults']['title'] = FALSE;
@@ -1169,7 +1169,7 @@ function __curios_generate_display_record_meta_default(&$view, &$view_spec, $bas
   // Combine multi-valued fields.
   $handler->display->display_options['query']['options']['consolidate'] = FALSE;
 
-  // Overrides.
+  // Overrides.ging activity screens, questions and assessments in conjunction with videos which set the scene for fun, interactive learning. Students will work through real-world technical challenges and will learn how to overcome them. Authentic screenshots, videos, interactive activities and a
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;

@@ -43,16 +43,17 @@
 
             $(document).ready(function () {
 
-                // Create new map
-                $(".view-map-view").after("<div id=multimap></div>");
-
-                var multimap = new OpenSpace.Map('multimap');
+              
 
                 var pos;
                 var places = $(".curios-place").map(function () {
                     return this.innerHTML;
                 }).get();
                 if (places.length > 0) {
+	          // Create new map
+                $(".view-map-view").after("<div id=multimap></div>");
+                var multimap = new OpenSpace.Map('multimap');
+
                     for (var i = 0; i < places.length; i++)
 
                     {
@@ -64,14 +65,15 @@
                             var popupText = '<a href="subjects/' + columns[0] + '">' + columns[3] + '</a>';
                             multimap.createMarker(pos, null, popupText);
 
-                        }
-                    }
-                }
-                multimap.setCenter(pos, defaultZoom);
+                        } //endif
+                    }//end for
+ 		multimap.setCenter(pos, defaultZoom);
                 // marker clustering
                 var clusterControl = new OpenSpace.Control.ClusterManager();
                 multimap.addControl(clusterControl);
                 clusterControl.activate();
+                }
+               
 
             });
 
