@@ -44,9 +44,9 @@
             $(document).ready(function () {
 
                 // Create new map
-                $(".view-map-view").after("<div id=osmap></div>");
+                $(".view-map-view").after("<div id=multimap></div>");
 
-                var multimap = new OpenSpace.Map('osmap');
+                var multimap = new OpenSpace.Map('multimap');
 
                 var pos;
                 var places = $(".curios-place").map(function () {

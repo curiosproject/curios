@@ -37,7 +37,7 @@ $options = array(
   'description_property' => 'hc:description',
     
   // Record metadata properties.
-  'owner_property' => //'hc:ownedBySociety',
+  'owner_property' => 'hc:ownedBySociety',
   'maintainer_property' => 'hc:maintainedBySociety',
   'published_property' => 'hc:approvedForPub',
   'editor_notes_property' => 'hc:editorNotes',
@@ -304,7 +304,7 @@ $fields[] = array(
    'type'     => 'integer',
 );
 $fields[] = array(
-   'property' => //'hc:ownedBySociety',
+   'property' => 'hc:ownedBySociety',
    'label'    => 'Record Owned By',
    'type'     => 'autocomplete',
 );

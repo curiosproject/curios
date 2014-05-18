@@ -242,7 +242,7 @@ $handler->conf = array(
    return TRUE;
    else
    { 
-    drupal_set_message("You do not have enough permission to view record ID:".$contexts["argument_string_1"]->data, \'error\');
+    drupal_set_message("There is no such record or you do not have enough permission to view it. Record ID: ".$contexts["argument_string_1"]->data, \'error\');
     return FALSE;
    }
 ',

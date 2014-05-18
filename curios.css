@@ -24,6 +24,12 @@
 	height:350px;
 }
 
+#multimap{
+	width:80%;
+	height:350px;
+}
+
+
 .curios-place{
 display:none;
 }
