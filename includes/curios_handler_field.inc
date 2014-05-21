@@ -89,18 +89,27 @@ class curios_sound_handler_field extends views_handler_field {
   }
 
   function render($values) {
-
+    
     $config = curios_configuration();
     $sound_url_field = 'hc_sound_file_'. $config->getURLFieldId();
-    $sound_url = $values->$sound_url_field;
-    global $base_url;
-    $sound_url = str_replace('http://www.hebrideanconnections.com/', $base_url.'/', str_replace(' ','%20',$sound_url));
-
-    $title = addslashes($values->{$this->options['title_field']}) ;
-    
-    $sound_output = "<audio id='audio_player_single' src='$sound_url' title='$title' > </audio>";
-    return $sound_output;
-  }
+//hhn: if aggregation used then these are no longer object but array
+	if (is_array($values)) 
+	{  
+	   foreach(array_values($values[$sound_url_field]) as $url)
+	    $sound_urls[] = $url; // this works for PHP 5.4+ only
+	}
+	else 
+	    $sound_urls[] =$values->{$sound_url_field};
+ global $base_url;
+    foreach ($sound_urls as $sound_url)
+    {
+	   
+	    $url = str_replace('http://www.hebrideanconnections.com/', $base_url.'/', str_replace(' ','%20',$sound_url));
+	   
+	    $sound_output[] = "<audio id='audio_player_single' src='$url'  > </audio>";
+    }
+   return implode('',$sound_output);
+ }
 }
 
 
@@ -111,19 +120,33 @@ class curios_date_range_field extends views_handler_field {
   }
 
   function render($values) {
-    $result_position = $this->options['date_range_position'];
+     $result_position = $this->options['date_range_position'];
     $field_suffix = ($result_position > 0) ? '_'.$result_position : '';
 
     $date_range_from_field = $this->options['date_range_from'] . $field_suffix;
     $date_range_to_field = $this->options['date_range_to'] . $field_suffix;
+//hhn: if aggregation used then these are no longer object but array.
+	if (is_array($values))
+	{	if (isset($values[$date_range_from_field]))
+		{	$dateFromArr = array_values($values[$date_range_from_field]);
+			$dateToArr = array_values($values[$date_range_to_field]);	
+			$outputArr;
+			for($i=0;$i<count($dateFromArr);$i++)
+			{
+			 $outputArr[]=curios_format_daterange($dateFromArr[$i], $dateToArr[$i]);	
+			}
+			return implode(";",$outputArr);
+		}
+	}
+   	else {
+	    if (isset($values->{$date_range_from_field})) {
+	      $dateFrom = $values->{$date_range_from_field};
+	      $dateTo = $values->{$date_range_to_field};
 
-    if (isset($values->{$date_range_from_field})) {
-      $dateFrom = $values->{$date_range_from_field};
-      $dateTo = $values->{$date_range_to_field};
-
-      return curios_format_daterange($dateFrom, $dateTo);
-    } else {
-      return '';
-    }
-  }
+	      return curios_format_daterange($dateFrom, $dateTo);
+	    } 
+	    
+	}//end is_array else
+  return '';
+  } //end function
 }

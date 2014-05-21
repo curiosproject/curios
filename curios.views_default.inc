@@ -397,7 +397,7 @@ function __curios_generate_display_properties_default(&$view, &$view_spec, $base
   $handler->display->display_options['query']['type'] = 'views_query';
   
   // Combine multi-valued fields (only for query , not for update service)
-  $handler->display->display_options['query']['options']['consolidate'] = (strpos($view->name, 'update') !== FALSE)?FALSE:TRUE;
+  $handler->display->display_options['query']['options']['consolidate'] = (strpos($view->name, "update") >=0)?FALSE:TRUE;
 
   // Overrides.
   $handler->display->display_options['defaults']['title'] = FALSE;
@@ -665,19 +665,20 @@ function __curios_generate_object_block(&$view, &$view_spec, $base_fields, $fiel
     $handler->display->display_options['fields'][$type_field_name]['label'] = '';
     $handler->display->display_options['fields'][$type_field_name]['exclude'] = TRUE;
     $handler->display->display_options['fields'][$type_field_name]['required'] = 1;
-
+// Description as tooltips for object properties
     $handler->display->display_options['fields'][$description_field_name]['id'] = $description_field_name;
     $handler->display->display_options['fields'][$description_field_name]['table'] = $view->base_table;
     $handler->display->display_options['fields'][$description_field_name]['field'] = $description_field_name;
     $handler->display->display_options['fields'][$description_field_name]['relationship'] = $field_name;
     $handler->display->display_options['fields'][$description_field_name]['label'] = '';
     $handler->display->display_options['fields'][$description_field_name]['exclude'] = TRUE;
-    $handler->display->display_options['fields'][$description_field_name]['type'] = 'text_trimmed';
+    $handler->display->display_options['fields'][$description_field_name]['alter']['max_length'] = '200';
+    $handler->display->display_options['fields'][$description_field_name]['alter']['trim'] = TRUE;
+    $handler->display->display_options['fields'][$description_field_name]['alter']['url_encode'] = 0;
+    $handler->display->display_options['fields'][$description_field_name]['type'] = 'text_plain';
     $handler->display->display_options['fields'][$description_field_name]['required'] = 0;
     $handler->display->display_options['fields'][$description_field_name]['exists'] = 0;
-    $handler->display->display_options['fields'][$description_field_name]['settings'] = array(
-   'trim_length' => '300',
-  );
+   
 
     /* Field: Global: Link Target Rewriter */
     $title_field_id = $config->getDefaultResourceId().'_'.$config->getTitleFieldId();

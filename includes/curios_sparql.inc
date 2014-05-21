@@ -147,9 +147,9 @@ function _curios_subject_delete($subject_id) {
   $query = '';
   $query .= "DELETE ";
   $query .= "WHERE {\n";
-  $query .= "  ?subject ?p ?o .\n";
-  $query .= "  ?s ?p1 ?subject .\n";
-  $query .= "  FILTER ( ?subject = $record ) }";
+  $query .= "  $record  ?p ?o .\n";
+  $query .= "  ?s ?p1 $record .}\n";
+//  $query .= "  FILTER ( ?subject = $record ) }";
 
   return __curios_sparql_update($query);
 }
