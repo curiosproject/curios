@@ -168,7 +168,7 @@ function __curios_configuration_resources_views($config, $config_spec) {
   $global_description_field = $config->getField($config->getDescriptionFieldId());
 
   $owner_field = $config->getField($config->getOwnerFieldId());
-  //$maintainer_field = $config->getField($config->getMaintainerFieldId());
+  $maintainer_field = $config->getField($config->getMaintainerFieldId());
   $published_field = $config->getField($config->getPublishedFieldId());
   $editor_notes_field = $config->getField($config->getEditorNotesFieldId());
 
@@ -228,7 +228,7 @@ function __curios_configuration_resources_views($config, $config_spec) {
 
     // Add record metadata fields.
     $resource->addField($owner_field);
-    //$resource->addField($maintainer_field);
+    $resource->addField($maintainer_field);
     $resource->addField($published_field);
     $resource->addField($editor_notes_field);
 

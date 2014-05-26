@@ -396,9 +396,7 @@ function __curios_generate_display_properties_default(&$view, &$view_spec, $base
   $handler = $view->new_display('block', 'Properties', 'properties');
   $handler->display->display_options['query']['type'] = 'views_query';
   
-  // Combine multi-valued fields (only for query , not for update service)
-  $handler->display->display_options['query']['options']['consolidate'] = (strpos($view->name, "update") >=0)?FALSE:TRUE;
-
+  
   // Overrides.
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
@@ -413,10 +411,21 @@ function __curios_generate_display_properties_default(&$view, &$view_spec, $base
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['access'] = FALSE;
-
+ 
+ // Combine multi-valued fields (only for query , not for update service). If it's multi-values then the pager must be none
+if ((strpos($view->name, "update") >=0))
+{
+  $handler->display->display_options['query']['options']['consolidate'] = FALSE;
+  // Pager options.
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '1';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+}
+else
+{  $handler->display->display_options['query']['options']['consolidate'] = TRUE;
   // Pager options.
   $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
+} 
   // Field options.
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
