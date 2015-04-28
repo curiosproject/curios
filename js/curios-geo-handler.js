@@ -1,6 +1,6 @@
 /*
  * curios-geo-handler.js
- * 
+ *
  * Copyright (c) 2011-2014, University of Aberdeen, Hai Nguyen (hai.nguyen@abdn.ac.uk). All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -20,109 +20,154 @@ var osMap, dragControl, marker, mapMarker;
 (function($) {
     Drupal.behaviors.field_geo = {
         attach: function(context, settings) {
-	// set name for coordinate fields (for example geo:lat, hc:northing...). Check the configuration file under options/map_settings
-	  var 	x = settings.curiosMap.mapXName, 
-    	      	y = settings.curiosMap.mapYName,
-	      	defaultZoom = settings.curiosMap.defaultZoom,
-		defaultN = settings.curiosMap.defaultN,
-		defaultE = settings.curiosMap.defaultE;
-            // switching between widgets
-            $('input[name='+y+'],input[name='+x+']').live("focus", function(event) {
-		// if already loaded, don't reload;
-		if ($('#map').attr("loaded")) return;
-		$('#map').attr("loaded",true);
-		$('#map').css("width", "100%");
-		$('#map').css("height", "500px"); 
-		var E = $("input[name=old_"+x+"]").val(), N = $("input[name=old_"+y+"]").val();
-		if ((E=="")||isNaN(E)) E = defaultE;
-		if ((N=="")||isNaN(N)) N = defaultN;
-		var initialCenterPoint = new OpenSpace.MapPoint(E,N);
-		createMap(initialCenterPoint);
-                osMap.createMarker(initialCenterPoint);
-		createDragControl();
-                osMap.addControl(dragControl);
-                activateDragControl();
-		if (E!=defaultE || N!=defaultN) 
-			updateMarkerPositionToTextfield(initialCenterPoint);
-            });
-            $('input[name='+y+'],input[name='+x+']').live("blur", function(event) {
-		// update the marker based on textfield values
-		var E = $("input[name="+x+"]").val(), N = $("input[name="+y+"]").val();
-		if ((E=="")||isNaN(E)) E = defaultE;
-		if ((N=="")||isNaN(N)) N = defaultN;
-		var newCenterPoint = new OpenSpace.MapPoint(E,N);
-		osMap.getMarkerLayer().clearMarkers();
-		osMap.createMarker(newCenterPoint);
-		osMap.setCenter(newCenterPoint);
-	   });
+            // set name for coordinate fields (for example geo:lat, hc:northing...). Check the configuration file under options/map_settings
+            var x = settings.curiosMap.mapXName,
+                y = settings.curiosMap.mapYName,
+                defaultZoom = settings.curiosMap.defaultZoom,
+                defaultN = settings.curiosMap.defaultN,
+                defaultE = settings.curiosMap.defaultE;
+                console.log(x);
+            if (x.toLowerCase().indexOf('east')+x.toLowerCase().indexOf('north')>=0)
+            {	
+	            // switching between widgets
+	            $('input[name=' + y + '],input[name=' + x + ']').live("focus", function(event) {
+	                // if already loaded, don't reload;
+	                if ($('#map').attr("loaded")) return;
+	                $('#map').attr("loaded", true);
+	                $('#map').css("width", "100%");
+	                $('#map').css("height", "500px");
+	                var E = $("input[name=old_" + x + "]").val(),
+	                    N = $("input[name=old_" + y + "]").val();
+	                if ((E == "") || isNaN(E)) E = defaultE;
+	                if ((N == "") || isNaN(N)) N = defaultN;
+	                var initialCenterPoint = new OpenSpace.MapPoint(E, N);
+	                createMap(initialCenterPoint);
+	                osMap.createMarker(initialCenterPoint);
+	                createDragControl();
+	                osMap.addControl(dragControl);
+	                activateDragControl();
+	                if (E != defaultE || N != defaultN)
+	                    updateMarkerPositionToTextfield(initialCenterPoint);
+	            });
+	            $('input[name=' + y + '],input[name=' + x + ']').live("blur", function(event) {
+	                // update the marker based on textfield values
+	                var E = $("input[name=" + x + "]").val(),
+	                    N = $("input[name=" + y + "]").val();
+	                if ((E == "") || isNaN(E)) E = defaultE;
+	                if ((N == "") || isNaN(N)) N = defaultN;
+	                var newCenterPoint = new OpenSpace.MapPoint(E, N);
+	                osMap.getMarkerLayer().clearMarkers();
+	                osMap.createMarker(newCenterPoint);
+	                osMap.setCenter(newCenterPoint);
+	            });
 
-        // creates the hand map centred on the initialCenterPoint
+	            // creates the hand map centred on the initialCenterPoint
 
-	function createMap(initialCenterPoint) {
-	  
-		osMap = new OpenSpace.Map("map");
-		osMap.setCenter(initialCenterPoint, defaultZoom);
-	}
+	            function createMap(initialCenterPoint) {
 
-
-	// updates the display text to the marker location
-
-	function updateMarkerPositionToTextfield(lonlat) {
-	  
-		document.getElementsByName(x)[0].value = Math.round(lonlat.lon);
-		document.getElementsByName(y)[0].value = Math.round(lonlat.lat);
-	}
-
-	// creates the drag control for the map
-
-	function createDragControl() {
-	  
-
-	// Set dragging active on the default maker layer on map
-
-		dragControl = new OpenSpace.Control.DragMarkers(osMap.getMarkerLayer(),{
-
-	// onDrag create a lonlat variable with the lonlat (easting/northing in this projection) of the marker
-
-			onDrag: function( marker ){
-				var lonlat = marker.lonlat;
-				updateMarkerPositionToTextfield(lonlat);
-			},
-
-	// onComplete centre boths maps on the marker lonlat
-
-			onComplete: function( marker ){
-				var lonlat = marker.lonlat;
-		                osMap.setCenter(lonlat);
-			}
-		});
-	}
-
-	// Create the marker on the left hand map with the initial centre point
+	                osMap = new OpenSpace.Map("map");
+	                osMap.setCenter(initialCenterPoint, defaultZoom);
+	            }
 
 
-	// Centre both maps on the lonlat passed through
+	            // updates the display text to the marker location
+
+	            function updateMarkerPositionToTextfield(lonlat) {
+
+	                document.getElementsByName(x)[0].value = Math.round(lonlat.lon);
+	                document.getElementsByName(y)[0].value = Math.round(lonlat.lat);
+	            }
+
+	            // creates the drag control for the map
+
+	            function createDragControl() {
 
 
-	function updateMapMarkerPosition(lonlat){
-		osMap.getMarkerLayer().clearMarkers();
-		mapMarker = osMap.createMarker(lonlat);
-		osMap.setCenter(lonlat);
-	}
-	// Activate the dragcontrol
+	                // Set dragging active on the default maker layer on map
 
-	function activateDragControl() {
-		dragControl.activate();  
-		osMap.getMarkerLayer().setDragMode(true);
-	}
-        
-            
+	                dragControl = new OpenSpace.Control.DragMarkers(osMap.getMarkerLayer(), {
+
+	                    // onDrag create a lonlat variable with the lonlat (easting/northing in this projection) of the marker
+
+	                    onDrag: function(marker) {
+	                        var lonlat = marker.lonlat;
+	                        updateMarkerPositionToTextfield(lonlat);
+	                    },
+
+	                    // onComplete centre boths maps on the marker lonlat
+
+	                    onComplete: function(marker) {
+	                        var lonlat = marker.lonlat;
+	                        osMap.setCenter(lonlat);
+	                    }
+	                });
+	            }
+
+	            // Create the marker on the left hand map with the initial centre point
+
+
+	            // Centre both maps on the lonlat passed through
+
+
+	            function updateMapMarkerPosition(lonlat) {
+	                    osMap.getMarkerLayer().clearMarkers();
+	                    mapMarker = osMap.createMarker(lonlat);
+	                    osMap.setCenter(lonlat);
+	                }
+	                // Activate the dragcontrol
+
+	            function activateDragControl() {
+	                dragControl.activate();
+	                osMap.getMarkerLayer().setDragMode(true);
+	            }
+
+	        } // end OS case
+	        else // Leaflet maps
+	        {
+	        	 // switching between widgets
+	            $('input[name=' + y + '],input[name=' + x + ']').live("focus", function(event) {
+	                // if already loaded, don't reload;
+	                if ($('#map').attr("loaded")) return;
+	                $('#map').attr("loaded", true);
+	                $('#map').css("width", "100%");
+	                $('#map').css("height", "500px");
+	                var E = $("input[name=old_" + x + "]").val(),
+	                    N = $("input[name=old_" + y + "]").val();
+	                if ((E == "") || isNaN(E)) E = defaultE;
+	                if ((N == "") || isNaN(N)) N = defaultN;
+	                /*
+	                var initialCenterPoint = new OpenSpace.MapPoint(E, N);
+	                createMap(initialCenterPoint);
+	                osMap.createMarker(initialCenterPoint);
+	                createDragControl();
+	                osMap.addControl(dragControl);
+	                activateDragControl();
+	                if (E != defaultE || N != defaultN)
+	                    updateMarkerPositionToTextfield(initialCenterPoint);
+	                */
+	                console.log(E,N);
+	                var map = L.map('map').setView([E, N], defaultZoom);
+					L.tileLayer('http://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+					    attribution: 'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'
+						,id:	'examples.map-i875mjb7'				
+					}).addTo(map);
+	            });
+	            $('input[name=' + y + '],input[name=' + x + ']').live("blur", function(event) {
+	                // update the marker based on textfield values
+	                var E = $("input[name=" + x + "]").val(),
+	                    N = $("input[name=" + y + "]").val();
+	                if ((E == "") || isNaN(E)) E = defaultE;
+	                if ((N == "") || isNaN(N)) N = defaultN;
+	               /*
+	                var newCenterPoint = new OpenSpace.MapPoint(E, N);
+	                osMap.getMarkerLayer().clearMarkers();
+	                osMap.createMarker(newCenterPoint);
+	                osMap.setCenter(newCenterPoint);
+	                */
+	            });
+	        }
         }
     }
 
 
 })(jQuery);
-
-
-
-

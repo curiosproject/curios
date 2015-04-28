@@ -276,7 +276,7 @@ function __curios_generate_display_properties_hc_sound_file(&$view, &$view_spec,
   $url_field['alter']['alter_text'] = 1;
   $url_field['alter']['make_link'] = 1;
   $url_field['alter']['path'] = "[$url_field_name]";
-  $url_field['alter']['text'] = 'Download Sound File';
+  $url_field['alter']['text'] = 'Go to file';
 
   __curios_field_newline($handler);
   $handler->display->display_options['fields'][$url_field_name] = $url_field;

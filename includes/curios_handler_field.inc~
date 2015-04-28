@@ -84,7 +84,7 @@ class curios_image_thumbnail_field extends views_handler_field {
 
 class curios_sound_handler_field extends views_handler_field {
 
-// this function is to support hosting media files in OEmbed-supported websites (eg youtube, soundcloud). It will return the oembed file in json format. The html attribute of this object will be used for rendering the player.
+// this function is to support hosting media files in OEmbed-supported websites (eg youtube, soundcloud)
   function getOEmbed($website,$url)
  	{
                 $url = urlencode($url);

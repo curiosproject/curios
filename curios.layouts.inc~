@@ -76,7 +76,7 @@ $layout->settings = array(
     
     2 => array(
       'type' => 'column',
-      'width' => '78',
+      'width' => '75',
       'width_type' => '%',
       'parent' => 'main-row',
       'children' => array(
@@ -89,7 +89,7 @@ $layout->settings = array(
     ),
     3 => array(
       'type' => 'column',
-      'width' => '22',
+      'width' => '25',
       'width_type' => '%',
       'parent' => 'main-row',
       'children' => array(

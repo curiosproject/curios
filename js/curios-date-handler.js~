@@ -77,7 +77,7 @@
 +'</div>');
 	
 		// add date picker to all date field (fix bugs for uninitialised datepickers in other browers than Chrome.) 26/02/14 -- hhn
-		$("[type=date]").datepicker({ dateFormat: 'dd-mm-yy',   changeMonth: true,      changeYear: true });
+		$("[type=date]").datepicker({ dateFormat: 'dd-mm-yy' });
 
                 $(this_widget).show();
                 this_current_date_field.attr('disabled', true);

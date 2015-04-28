@@ -43,8 +43,8 @@ function curios_get_user_groupcode() {
   $user_data = user_load($user->uid);
   $group_code = NULL;
   if (isset($user_data->field_curios_group_code['und']))
-   $group_code = taxonomy_term_load($user_data->field_curios_group_code['und'][0]['tid'])->name;
- return $group_code;
+	$group_code = taxonomy_term_load($user_data->field_curios_group_code['und'][0]['tid'])->name;
+  return $group_code;
 }
 
 /**
@@ -54,93 +54,52 @@ function curios_format_daterange($dateFrom, $dateTo) {
   // remove T24:00:00 format from datetime => to well-form date
   // FIXED: 32bit strtoTime avoided by string processing.
   if ($dateFrom === "" || $dateTo==="")
-   return;
- $arrDateFrom = explode('-',preg_replace('/T.+$/', '', $dateFrom));
- $arrDateTo = explode('-',preg_replace('/T.+$/', '', $dateTo));
- $strYearFrom = $arrDateFrom[0];
- $strYearTo = $arrDateTo[0];
- $strMonthFrom = $arrDateFrom[1];
- $strMonthTo = $arrDateTo[1];
- $strDateFrom = $arrDateFrom[2];
- $strDateTo = $arrDateTo[2];
+	return;
+  $arrDateFrom = explode('-',preg_replace('/T.+$/', '', $dateFrom));
+  $arrDateTo = explode('-',preg_replace('/T.+$/', '', $dateTo));
+  $strYearFrom = $arrDateFrom[0];
+  $strYearTo = $arrDateTo[0];
+  $strMonthFrom = $arrDateFrom[1];
+  $strMonthTo = $arrDateTo[1];
+  $strDateFrom = $arrDateFrom[2];
+  $strDateTo = $arrDateTo[2];
 
- $dateMonthFrom = $strDateFrom.'-'.$strMonthFrom;
- $dateMonthTo = $strDateTo.'-'.$strMonthTo;
+  $dateMonthFrom = $strDateFrom.'-'.$strMonthFrom;
+  $dateMonthTo = $strDateTo.'-'.$strMonthTo;
 
- $strDMYFrom = $dateMonthFrom.'-'.$strYearFrom;
- $strDMYTo = $dateMonthTo.'-'.$strYearTo;
-
-  // is leap year
-  $year = (int)$strYearTo;
-  $isLeapYear = ((($year % 4) == 0) && ((($year % 100) != 0) || (($year %400) == 0)));
-
+  $strDMYFrom = $dateMonthFrom.'-'.$strYearFrom;
+  $strDMYTo = $dateMonthTo.'-'.$strYearTo;
   // same date 
- if (strcmp($strDMYFrom,$strDMYTo) == 0)
-   return $strDMYFrom;
-
- if (strcmp($strYearFrom,$strYearTo) == 0)
+  if (strcmp($strDMYFrom,$strDMYTo) == 0)
+	return $strDMYFrom;
+  
+  if (strcmp($strYearFrom,$strYearTo) == 0)
   {	//same year
-    if (strcmp($dateMonthFrom,'01-01')==0 && strcmp($dateMonthTo,'31-12')==0) 
-      return 	$strYearFrom;
-   // same month
-    if (strcmp($strMonthFrom,$strMonthTo) == 0)
-    {
-          if (strcmp($dateMonthFrom,'01-01')==0 && strcmp($dateMonthTo,'31-01')==0)
-                return  ('January ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-02')==0 && $isLeapYear && strcmp($dateMonthTo,'29-02')==0)
-                return  ('February ' . $strYearFrom);
-           if (strcmp($dateMonthFrom,'01-02')==0 && (!$isLeapYear) && strcmp($dateMonthTo,'28-02')==0)
-                return  ('February ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-03')==0 && strcmp($dateMonthTo,'31-03')==0)
-                return  ('March ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-04')==0 && strcmp($dateMonthTo,'30-04')==0)
-                return  ('April ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-05')==0 && strcmp($dateMonthTo,'31-05')==0)
-                return  ('May ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-06')==0 && strcmp($dateMonthTo,'30-06')==0)
-                return  ('June ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-07')==0 && strcmp($dateMonthTo,'31-07')==0)
-                return  ('July ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-08')==0 && strcmp($dateMonthTo,'31-08')==0)
-                return  ('August ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-09')==0 && strcmp($dateMonthTo,'30-09')==0)
-                return  ('September ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-10')==0 && strcmp($dateMonthTo,'31-10')==0)
-                return  ('October ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-11')==0 && strcmp($dateMonthTo,'30-11')==0)
-                return  ('November ' . $strYearFrom);
-          if (strcmp($dateMonthFrom,'01-12')==0 && strcmp($dateMonthTo,'31-12')==0)
-                return  ('December ' . $strYearFrom);         
-    }
-
-    if (strcmp($dateMonthFrom,'01-03')==0 && strcmp($dateMonthTo,'31-05')==0)
-    return 	('Spring ' . $strYearFrom);
-  if (strcmp($dateMonthFrom,'01-06')==0 && strcmp($dateMonthTo,'31-08')==0)
-    return 	('Summer ' . $strYearFrom);
-  if (strcmp($dateMonthFrom,'01-09')==0 && strcmp($dateMonthTo,'30-11')==0)
-    return 	('Autumn ' . $strYearFrom);
-}
-if (strcmp($dateMonthFrom,"01-01")==0 && strcmp($dateMonthTo,"31-12")==0) 
-{
+	if (strcmp($dateMonthFrom,'01-01')==0 && strcmp($dateMonthTo,'31-12')==0) 
+		return 	$strYearFrom;
+	if (strcmp($dateMonthFrom,'01-03')==0 && strcmp($dateMonthTo,'31-05')==0)
+		return 	('Spring ' . $strYearFrom);
+	if (strcmp($dateMonthFrom,'01-06')==0 && strcmp($dateMonthTo,'31-08')==0)
+		return 	('Summer ' . $strYearFrom);
+	if (strcmp($dateMonthFrom,'01-09')==0 && strcmp($dateMonthTo,'30-11')==0)
+		return 	('Autumn ' . $strYearFrom);
+  }
+  if (strcmp($dateMonthFrom,"01-01")==0 && strcmp($dateMonthTo,"31-12")==0) 
+  {
 	// same decade
 	if (strcmp(substr($strYearFrom,0,-1),substr($strYearTo,0,-1)) == 0) 
 		return substr($strYearFrom,0,-1).'0s';
   	// same century
 	if (strcmp(substr($strYearFrom,0,2),substr($strYearTo,0,2)) == 0) 
 		return strval(intval(substr($strYearFrom,0,2))+1).'th century';
-}
+  }
    // winter, lasting until next year
-if ( (strcmp($dateMonthFrom,'01-12') == 0) && $isLeapYear &&
-	(strcmp($dateMonthTo,'29-02') == 0) &&
+   if ( (strcmp($dateMonthFrom,'01-12') == 0) &&
+	(strcmp($dateMonthTo,'28-02') == 0) &&
 	(intval($strYearFrom) == intval($strYearTo)-1))
-  return 	'Winter ' . $strYearFrom;
+		return 	'Winter ' . $strYearFrom;
 
-if ( (strcmp($dateMonthFrom,'01-12') == 0) && (!$isLeapYear) &&
-  (strcmp($dateMonthTo,'28-02') == 0) &&
-  (intval($strYearFrom) == intval($strYearTo)-1))
-  return  'Winter ' . $strYearFrom;
-
-return 'Between ' .  $strDMYFrom  . ' and ' . $strDMYTo;
+  return 'Between ' .  $strDMYFrom  . ' and ' . $strDMYTo;
 }
 
 /**
@@ -162,7 +121,7 @@ function startsWith($needle, $haystack) {
  * startsWith function using strncasecmp.
  */
 function startsWith_ncasecmp($needle, $haystack) {
-  return !strncasecmp($haystack, $needle, strlen($needle));
+    return !strncasecmp($haystack, $needle, strlen($needle));
 }
 
 /**
@@ -181,6 +140,9 @@ function __curios_hash() {
  */
 function __curios_valid_id($id) {
   $result =  preg_match('/^[0-9]+$/', $id);
+var_dump($id);
+var_dump($result);
+die;
   return $result;
 }
 
@@ -357,7 +319,7 @@ function __curios_activate_block($module, $block, $region, $theme, $pages, $visi
     'pages' => trim($pages),
     'status' => (int) ($region != BLOCK_REGION_NONE),
     'visibility' => $visibility,
-    ))
+  ))
   ->execute();
 }
 

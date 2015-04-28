@@ -34,7 +34,7 @@ function curios_manage_page() {
 <p>From this page you can create, edit and delete records in the repository.</p>
 <ul>
 <li><a href="$base_path/create">Create a new record</a></li>
-<li><a href="$base_path/edit">Edit/Validate or delete an existing record</a></li>
+<li><a href="$base_path/edit">Edit or delete an existing record</a></li>
 </ul>
 <p>Choose an action from the menu to continue.</p>
 <ul>

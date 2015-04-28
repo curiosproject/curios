@@ -716,7 +716,7 @@ if (strpos($view->name, "update")==FALSE)
 	$handler->display->display_options['filters'][$published_field]['field'] = $published_field ;
 	$handler->display->display_options['filters'][$published_field]['relationship'] =  $field_name;
 	$handler->display->display_options['filters'][$published_field]['operator'] = '~=';
-	$handler->display->display_options['filters'][$published_field]['value'] = '(yes|pending)';
+	$handler->display->display_options['filters'][$published_field]['value'] = '(yes|no)';
 	$handler->display->display_options['filters'][$published_field]['sparql_options'] = array(
   'value_type' => 'string',
   'language' => '0',

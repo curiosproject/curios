@@ -237,7 +237,7 @@ function __curios_configuration_resources_views($config, $config_spec) {
     foreach ($config_spec['relationship_assignments'][$browsing_class_name] as $row) {
       $property = $row['property'];
       $target = (array)$row['target'];
-
+getObjectFields
       $relationship_id = $config->getCMSID($property);
       $relationship = $config->getField($relationship_id);
       $resource->addRelationship($relationship);

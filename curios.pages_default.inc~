@@ -434,7 +434,7 @@ $handler->conf = array(
      *
      * TODO ensure this remains consistent: relationship view blocks are named "object_$field_name"
      */
-    $relationship_block_name = 'object_'.$field_name;
+    $relationship_block_name = $field_name;
 
     $pane = new stdClass;
     $pane->pid = $relationship_block_name.'_pane';

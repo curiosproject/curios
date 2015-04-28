@@ -469,19 +469,17 @@ function _curios_installed_instances($resources, &$config) {
 
   foreach ($resources as $entity) {
     foreach ($entity->getFields() as $field) {
-	 if ($field!=NULL){
-	      $settings = ($field->getMachineName() == $config->getDescriptionFieldId() ||$field->getMachineName() == 'hc_description') ?
-		$description_settings : array('default_formatter' => 'filtered_html');
+      $settings = ($field->getMachineName() == $config->getDescriptionFieldId() ||$field->getMachineName() == 'hc_description') ?
+        $description_settings : array('default_formatter' => 'filtered_html');
 
-	      $field_instances[] = array(
-		'bundle' => $entity->getMachineName(),
-		'field_name' => $field->getMachineName(),
-		'label' => t($field->getLabel()),
-		'entity_type' => 'sparql_views_resource',
-		'ldcms_type' => $field->getType(),
-		'settings' => $settings,
-	      );
-	}
+      $field_instances[] = array(
+        'bundle' => $entity->getMachineName(),
+        'field_name' => $field->getMachineName(),
+        'label' => t($field->getLabel()),
+        'entity_type' => 'sparql_views_resource',
+        'ldcms_type' => $field->getType(),
+        'settings' => $settings,
+      );
     }
   }
 

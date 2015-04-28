@@ -254,7 +254,8 @@ EOT;
 
   $rs = __curios_sparql_query($query,'noinference');
 
-  if ($rs != NULL&&NULL!=$rs['result']['rows']&&NULL!=$rs['result']['rows'][0]['id']) {
+
+  if ($rs != NULL&&NULL!=$rs['result']['rows'][0]['id']) {
     return $rs['result']['rows'][0]['id'];
   } else {
     return -1;
@@ -309,8 +310,8 @@ function _curios_fetch_subject_types($subject_id) {
   $config = curios_configuration();
   $prefix = $config->getPrefix($config->getDefaultNamespace());
   $record = "$prefix:$subject_id";
- $query = "select ?type where { $record a ?type . }";
- // $query = "select ?type where { $record a ?type . ?type a owl:Class }";
+
+  $query = "select ?type where { $record a ?type . }";
   $rs = __curios_sparql_query($query);
   $classes = array();
   foreach ($rs['result']['rows'] as $row) {

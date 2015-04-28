@@ -74,7 +74,7 @@ display:none;
 
 #content .curios-image-gallery .views-row-odd {
     clear: both;
-  /*  float: left;*/
+    float: left;
 }
 
 #content .curios-image-gallery .views-row-even {
